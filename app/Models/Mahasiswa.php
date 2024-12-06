@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Masyarakat extends Authenticatable
+class Mahasiswa extends Authenticatable
 {
     use HasFactory;
 
-    protected $table = 'masyarakat';
+    protected $table = 'mahasiswa';
 
-    protected $primaryKey = 'nik';
+    protected $primaryKey = 'npm';
 
     public $incrementing = false;
 
     protected $fillable = [
-        'nik',
+        'npm',
         'name',
         'email',
         'email_verified_at',
@@ -33,5 +33,4 @@ class Masyarakat extends Authenticatable
         'district_id',
         'village_id',
     ];
-
 }

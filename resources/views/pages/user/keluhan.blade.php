@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pengaduan')
+@section('title', 'Keluhan')
 
 @section('content')
 <main id="main" class="martop">
@@ -8,57 +8,47 @@
     <section class="inner-page">
       <div class="container ">
         <div class="title text-center mb-5">
-            <h3 class="fw-bold">Layanan Pengaduan Masyarakat</h3>
-            <h5 class="fw-normal">Sampaikan laporan Anda langsung kepada instansi pemerintah berwenang</h5>
+            <h3 class="fw-bold">Layanan Keluhan</h3>
+            <h5 class="fw-normal">Sampaikan keluhan Anda langsung kepada yang berwenang</h5>
         </div>
        <div class="card card-responsive p-4 border-0 col-md-8 shadow rounded mx-auto">
-        <form action="{{ route('pengaduan.store')}}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('keluhan.store')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group mb-3">
-                <label for="judul_laporan" class="form-label">Judul Laporan</label>
-                <input type="text" value="{{ old('judul_laporan') }}" name="judul_laporan" id="judul_laporan"
-                    placeholder="Ketik Judul Pengaduan" class="form-control @error('judul_laporan') is-invalid @enderror" required >
-                @error('judul_laporan')
+                <label for="judul_keluhan" class="form-label">Judul Keluhan</label>
+                <input type="text" value="{{ old('judul_keluhan') }}" name="judul_keluhan" id="judul_keluhan"
+                    placeholder="Ketik Judul Keluhan" class="form-control @error('judul_keluhan') is-invalid @enderror" required >
+                @error('judul_keluhan')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
                 @enderror
             </div>
             <div class="form-group mb-3">
-                <label for="isi_laporan" class="form-label">Isi Laporan</label>
-                <textarea name="isi_laporan" id="isi_laporan"
-                    placeholder="Ketik isi Pengaduan" rows="5" class="form-control @error('isi_laporan') is-invalid @enderror" required>{{ old('isi_laporan') }}</textarea>
-                @error('isi_laporan')
+                <label for="isi_keluhan" class="form-label">Isi Keluhan</label>
+                <textarea name="isi_keluhan" id="isi_keluhan"
+                    placeholder="Ketik isi Keluhan" rows="5" class="form-control @error('isi_keluhan') is-invalid @enderror" required>{{ old('isi_keluhan') }}</textarea>
+                @error('isi_keluhan')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
                 @enderror
             </div>
 
-            <div class="form-group mb-3">
-                <label for="tgl_kejadian" class="form-label">Tanggal Kejadian</label>
-                <input type="date" value="{{ old('tgl_kejadian') }}" name="tgl_kejadian" id="tgl_kejadian"
-                    placeholder="Tanggal Kejadian" class="form-control @error('tgl_kejadian') is-invalid @enderror" required
+            {{-- <div class="form-group mb-3">
+                <label for="tgl_keluhan" class="form-label">Tanggal Keluhan</label>
+                <input type="date" value="{{ old('tgl_keluhan') }}" name="tgl_keluhan" id="tgl_keluhan"
+                    placeholder="Tanggal Kejadian" class="form-control @error('tgl_keluhan') is-invalid @enderror" required
                     >
-                @error('tgl_kejadian')
+                @error('tgl_keluhan')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
                 @enderror
-            </div>
+            </div> --}}
 
             <div class="form-group mb-3">
-                <label for="lokasi_kejadian" class="form-label">Lokasi Kejadian</label>
-                <textarea name="lokasi_kejadian" id="lokasi_kejadian"
-                    placeholder="Ketik Lokasi Kejadian" rows="3" class="form-control @error('lokasi_kejadian') is-invalid @enderror" required>{{ old('lokasi_kejadian') }}</textarea>
-                @error('lokasi_kejadian')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
-            </div>
-            <div class="form-group mb-3">
-                <label for="foto" class="form-label">Foto Bukti</label>
+                <label for="foto" class="form-label">Bukti Keluhan</label>
                 <input type="file" name="foto" id="foto" class="form-control @error('file') is-invalid @enderror" required>
                 @error('file')
                     <div class="invalid-feedback">
@@ -78,7 +68,7 @@
 @endsection
 
 @push('addon-script')
-    @if (!auth('masyarakat')->check())
+    @if (!auth('mahasiswa')->check())
         <script>
             Swal.fire({
                 title: 'Peringatan!',
@@ -95,7 +85,7 @@
                 }
                 });
         </script>
-    @elseif(auth('masyarakat')->user()->email_verified_at == null && auth('masyarakat')->user()->telp_verified_at == null)
+    @elseif(auth('mahasiswa')->user()->email_verified_at == null && auth('mahasiswa')->user()->telp_verified_at == null)
         <script>
             Swal.fire({
                 title: 'Peringatan!',
@@ -114,11 +104,11 @@
         </script>
     @endif
 
-    @if (session()->has('pengaduan'))
+    @if (session()->has('keluhan'))
         <script>
             Swal.fire({
                 title: 'Pemberitahuan!',
-                text: '{{ session()->get('pengaduan') }}',
+                text: '{{ session()->get('keluhan') }}',
                 icon: '{{ session()->get('type') }}',
                 confirmButtonColor: '#28B7B5',
                 confirmButtonText: 'OK',

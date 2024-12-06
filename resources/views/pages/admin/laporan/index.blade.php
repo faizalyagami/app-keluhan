@@ -54,10 +54,10 @@
               <div class="card-header">
                 <div class="row align-items-center">
                   <div class="col-8">
-                    <h3 class="mb-0">Data Pengaduan</h3>
+                    <h3 class="mb-0">Data Keluhan</h3>
                   </div>
                   <div class="col text-right">
-                    @if ($pengaduan ?? '')
+                    @if ($keluhan ?? '')
                       <form action="{{ route('laporan.export') }}" method="POST">
                         @csrf
                         <input type="hidden" name="date_from" value="{{ $from }}">
@@ -69,30 +69,26 @@
                 </div>
               </div>
               <div class="card-body">
-                @if($pengaduan ?? '')
+                @if($keluhan ?? '')
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Tgl Pengaduan</th>
+                                <th>Tgl Keluhan</th>
                                 <th>Nama</th>
-                                <th>Judul Laporan</th>
-                                <th>Isi Laporan</th>
-                                <th>Tgl Kejadian</th>
-                                <th>Lokasi Kejadian</th>
+                                <th>Judul Keluhan</th>
+                                <th>Isi Keluhan</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($pengaduan as $k => $i)
+                            @foreach($keluhan as $k => $i)
                             <tr>
                                 <td>{{ $k += 1 }}.</td>
-                                <td>{{ Carbon\Carbon::parse($i->tgl_pengaduan)->format('d-m-Y') }}</td>
+                                <td>{{ Carbon\Carbon::parse($i->tgl_keluhan)->format('d-m-Y') }}</td>
                                 <td>{{ $i->user->name }}</td>
-                                <td>{{ $i->judul_laporan }}</td>
-                                <td>{{ $i->isi_laporan }}</td>
-                                <td>{{ Carbon\Carbon::parse($i->tgl_kejadian)->format('d-m-Y') }}</td>
-                                <td>{{ $i->lokasi_kejadian }}</td>
+                                <td>{{ $i->judul_keluhan }}</td>
+                                <td>{{ $i->isi_keluhan }}</td>
                                 <td>{{ $i->status }}</td>
                             </tr>
                             @endforeach
@@ -111,7 +107,7 @@
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#pengaduanTable').DataTable();
+        $('#keluhanTable').DataTable();
     } );
 </script>
 @if (session()->has('status'))

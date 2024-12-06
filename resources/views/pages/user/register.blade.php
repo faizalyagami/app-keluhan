@@ -7,7 +7,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
   <meta name="author" content="Creative Tim">
-  <title>Login | Pengaduan Masyarakat</title>
+  <title>Login | APP -KELUHAN</title>
 
   @stack('prepend-style')
   @include('includes.admin.style')
@@ -19,7 +19,7 @@
   <nav id="navbar-main" class="navbar navbar-horizontal navbar-transparent navbar-main navbar-expand-lg navbar-light">
     <div class="container">
       <a class="navbar-brand" href="/">
-        Pengaduan Masyarakat
+        Keluhan Mahasiswa
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -29,7 +29,7 @@
           <div class="row">
             <div class="col-6 collapse-brand">
               <a href="/">
-               Pengaduan Masyarakat
+               Keluhan Mahasiswa
               </a>
             </div>
             <div class="col-6 collapse-close">
@@ -109,8 +109,8 @@
                           <div class="input-group-prepend">
                             <span class="input-group-text"></span>
                           </div>
-                          <input type="number" value="{{ old('nik') }}" class="form-control @error('nik') is-invalid @enderror" name="nik" id="nik" placeholder="NIK">
-                            @error('nik')
+                          <input type="number" value="{{ old('npm') }}" class="form-control @error('npm') is-invalid @enderror" name="npm" id="npm" placeholder="npm">
+                            @error('npm')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -345,7 +345,7 @@
     <div class="container">
 
           <div class="copyright text-center text-muted">
-            &copy; Copyright <strong><span><a href="" target="_blank">Bayu Prayoga</a></span></strong>.SMK Informatika Utama
+            &copy; Copyright <strong><span><a href="" target="_blank">Fakultas Psikologi</a></span></strong>.Universitas Islam Bandung
           </div>
     </div>
   </footer>

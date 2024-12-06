@@ -31,12 +31,12 @@
             <div class="card">
               <!-- Card header -->
               <div class="card-header border-0 d-flex justify-content-between">
-                <h3 class="mb-0">Data Pengaduan</h3>
+                <h3 class="mb-0">Data keluhan</h3>
                 <a href="{{ route('petugas.create')}}" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah Petugas</a>
               </div>
               <!-- Light table -->
               <div class="table-responsive">
-                <table class="table align-items-center table-flush" id="pengaduanTable">
+                <table class="table align-items-center table-flush" id="keluhanTable">
                   <thead class="thead-light">
                     <tr>
                       <th scope="col" class="sort" data-sort="no">No</th>
@@ -105,7 +105,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#pengaduanTable').DataTable();
+        $('#keluhanTable').DataTable();
     } );
 </script>
 

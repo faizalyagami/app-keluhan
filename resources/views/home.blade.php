@@ -7,8 +7,8 @@
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex align-items-center">
     <div class="container">
-      <h1>Pengaduan Masyarakat</h1>
-      <a href="{{ route('pengaduan')}}" class="btn-get-started scrollto">Buat Pengaduan</a>
+      <h1>Keluhan Mahasiswa</h1>
+      <a href="{{ route('keluhan')}}" class="btn-get-started scrollto">Buat Keluhan</a>
     </div>
   </section><!-- End Hero -->
 
@@ -27,7 +27,7 @@
                 <div class="col-xl-3 d-flex align-items-stretch">
                   <div class="icon-box mt-4 mt-xl-0">
                     <i class="bx bxs-megaphone"></i>
-                    <h4>Tulis Pengaduan</h4>
+                    <h4>Tulis Keluhan</h4>
                   </div>
                 </div>
                 <div class="col-xl-3 d-flex align-items-stretch">
@@ -65,8 +65,8 @@
           <div class="col-lg-3 col-md-6">
             <div class="count-box">
               <i class='bx bx-list-check' ></i>
-              <span data-purecounter-start="0" data-purecounter-end="{{ $pengaduan }} " data-purecounter-duration="1" class="purecounter"></span>
-              <p>Semua Pengaduan</p>
+              <span data-purecounter-start="0" data-purecounter-end="{{ $keluhan }} " data-purecounter-duration="1" class="purecounter"></span>
+              <p>Semua Keluhan</p>
             </div>
           </div>
 

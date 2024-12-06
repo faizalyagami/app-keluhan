@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Mail\VerifikasiEmailUntukRegistrasiPengaduanMasyarakat;
-use App\Models\Masyarakat;
-use App\Models\Pengaduan;
+use App\Mail\VerifikasiEmailUntukRegistrasiKeluhanMahasiswa;
+use App\Models\Keluhan;
+use App\Models\Mahasiswa;
 use App\Models\Petugas;
 use App\Models\Province;
 use Illuminate\Http\Request;
@@ -21,12 +21,12 @@ class UserController extends Controller
 {
     public function index()
     {
-        $pengaduan = Pengaduan::count();
-        $proses = Pengaduan::where('status', 'proses')->count();
-        $selesai = Pengaduan::where('status', 'selesai')->count();
+        $keluhan = Keluhan::count();
+        $proses = Keluhan::where('status', 'proses')->count();
+        $selesai = Keluhan::where('status', 'selesai')->count();
 
         return view('home', [
-            'pengaduan' => $pengaduan,
+            'keluhan' => $keluhan,
             'proses' => $proses,
             'selesai' => $selesai,
         ]);
@@ -37,10 +37,10 @@ class UserController extends Controller
     //     return view('pages.user.about');
     // }
 
-    public function pengaduan()
+    public function keluhan()
     {
-        $pengaduan = Pengaduan::get();
-        return view('pages.user.pengaduan', compact('pengaduan'));
+        $keluhan = Keluhan::get();
+        return view('pages.user.keluhan', compact('keluhan'));
     }
 
     public function masuk()
@@ -64,7 +64,7 @@ class UserController extends Controller
 
         if (filter_var($request->username, FILTER_VALIDATE_EMAIL)) {
 
-            $email = Masyarakat::where('email', $request->username)->first();
+            $email = Mahasiswa::where('email', $request->username)->first();
 
             if (!$email) {
                 return redirect()->back()->with(['pesan' => 'Email tidak terdaftar']);
@@ -77,21 +77,21 @@ class UserController extends Controller
                 return redirect()->back()->with(['pesan' => 'Password tidak sesuai']);
             }
 
-            if (Auth::guard('masyarakat')->attempt(['email' => $request->username, 'password' => $request->password])) {
+            if (Auth::guard('mahasiswa')->attempt(['email' => $request->username, 'password' => $request->password])) {
 
-                return redirect()->route('pengaduan');
+                return redirect()->route('keluhan');
             } else {
 
                 return redirect()->back()->with(['pesan' => 'Akun tidak terdaftar!']);
             }
         } else {
 
-            $masyarakat = Masyarakat::where('username', $request->username)->first();
+            $mahasiswa = Mahasiswa::where('username', $request->username)->first();
 
             $petugas = Petugas::where('username', $request->username)->first();
 
-            if ($masyarakat) {
-                $username = Masyarakat::where('username', $request->username)->first();
+            if ($mahasiswa) {
+                $username = Mahasiswa::where('username', $request->username)->first();
 
                 if (!$username) {
                     return redirect()->back()->with(['pesan' => 'Username tidak terdaftar']);
@@ -103,9 +103,9 @@ class UserController extends Controller
                     return redirect()->back()->with(['pesan' => 'Password tidak sesuai']);
                 }
 
-                if (Auth::guard('masyarakat')->attempt(['username' => $request->username, 'password' => $request->password])) {
+                if (Auth::guard('mahasiswa')->attempt(['username' => $request->username, 'password' => $request->password])) {
 
-                    return redirect()->route('pengaduan');
+                    return redirect()->route('keluhan');
                 } else {
 
                     return redirect()->back()->with(['pesan' => 'Akun tidak terdaftar!']);
@@ -147,10 +147,10 @@ class UserController extends Controller
         $data = $request->all();
 
         $validate = Validator::make($data, [
-            'nik' => ['required', 'min:16', 'max:16', 'unique:masyarakat'],
+            'npm' => ['required', 'min:16', 'max:16', 'unique:mahasiswa'],
             'name' => ['required', 'string'],
-            'email' => ['required', 'email', 'string', 'unique:masyarakat'],
-            'username' => ['required', 'string', 'regex:/^\S*$/u', 'unique:masyarakat', 'unique:petugas,username'],
+            'email' => ['required', 'email', 'string', 'unique:mahasiswa'],
+            'username' => ['required', 'string', 'regex:/^\S*$/u', 'unique:mahasiswa', 'unique:petugas,username'],
             'jenis_kelamin' => ['required'],
             'password' => ['required', 'min:6'],
             'telp' => ['required', 'regex:/(08)[0-9]/'],
@@ -168,8 +168,8 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validate)->withInput();
         }
 
-        Masyarakat::create([
-            'nik' => $data['nik'],
+        Mahasiswa::create([
+            'npm' => $data['npm'],
             'name' => $data['name'],
             'email' => $data['email'],
             'username' => strtolower($data['username']),
@@ -187,35 +187,34 @@ class UserController extends Controller
             'village_id' => $data['village_id'],
         ]);
 
-        $masyarakat = Masyarakat::where('email', $data['email'])->first();
+        $mahasiswa = Mahasiswa::where('email', $data['email'])->first();
 
-        Auth::guard('masyarakat')->login($masyarakat);
+        Auth::guard('mahasiswa')->login($mahasiswa);
 
-        return redirect('/pengaduan');
+        return redirect('/keluhan');
     }
 
     public function logout()
     {
-        Auth::guard('masyarakat')->logout();
+        Auth::guard('mahasiswa')->logout();
 
         return redirect('/login');
     }
 
-    public function storePengaduan(Request $request)
+    public function storeKeluhan(Request $request)
     {
-        if (!Auth::guard('masyarakat')->check()) {
-            return redirect()->back()->with(['pengaduan' => 'Login dibutuhkan!', 'type' => 'error']);
-        } elseif (Auth::guard('masyarakat')->user()->email_verified_at == null && Auth::guard('masyarakat')->user()->telp_verified_at == null) {
-            return redirect()->back()->with(['pengaduan' => 'Akun belum diverifikasi!', 'type' => 'error']);
+        if (!Auth::guard('mahasiswa')->check()) {
+            return redirect()->back()->with(['keluhan' => 'Login dibutuhkan!', 'type' => 'error']);
+        } elseif (Auth::guard('mahasiswa')->user()->email_verified_at == null && Auth::guard('mahasiswa')->user()->telp_verified_at == null) {
+            return redirect()->back()->with(['keluhan' => 'Akun belum diverifikasi!', 'type' => 'error']);
         }
 
         $data = $request->all();
 
         $validate = Validator::make($data, [
-            'judul_laporan' => ['required'],
-            'isi_laporan' => ['required'],
-            'tgl_kejadian' => ['required'],
-            'lokasi_kejadian' => ['required'],
+            'judul_keluhan' => ['required'],
+            'isi_keluhan' => ['required'],
+            //'tgl_keluhan' => ['required'],
             // 'id_kategori' => ['required'],
         ]);
 
@@ -225,76 +224,74 @@ class UserController extends Controller
 
 
         if ($request->file('foto')) {
-            $data['foto'] = $request->file('foto')->store('assets/pengaduan', 'public');
+            $data['foto'] = $request->file('foto')->store('assets/keluhan', 'public');
         }
 
         date_default_timezone_set('Asia/Bangkok');
 
-        $pengaduan = Pengaduan::create([
-            'tgl_pengaduan' => date('Y-m-d h:i:s'),
-            'nik' => Auth::guard('masyarakat')->user()->nik,
-            'judul_laporan' => $data['judul_laporan'],
-            'isi_laporan' => $data['isi_laporan'],
-            'tgl_kejadian' => $data['tgl_kejadian'],
-            'lokasi_kejadian' => $data['lokasi_kejadian'],
+        $keluhan = Keluhan::create([
+            'tgl_keluhan' => date('Y-m-d h:i:s'),
+            'npm' => Auth::guard('mahasiswa')->user()->npm,
+            'judul_keluhan' => $data['judul_keluhan'],
+            'isi_keluhan' => $data['isi_keluhan'],
+            //'tgl_keluhan' => $data['tgl_keluhan'],
             // 'id_kategori' => $data['id_kategori'],
-            'foto' => $data['foto'] ?? 'assets/pengaduan/tambakmekar.png',
+            'foto' => $data['foto'] ?? 'assets/keluhan/tambakmekar.png',
             'status' => '0',
         ]);
 
-        if ($pengaduan) {
+        if ($keluhan) {
 
-            return redirect()->back()->with(['pengaduan' => 'Berhasil terkirim!', 'type' => 'success']);
+            return redirect()->back()->with(['keluhan' => 'Berhasil terkirim!', 'type' => 'success']);
         } else {
 
-            return redirect()->back()->with(['pengaduan' => 'Gagal terkirim!', 'type' => 'error']);
+            return redirect()->back()->with(['keluhan' => 'Gagal terkirim!', 'type' => 'error']);
         }
     }
 
     public function laporan($who = '')
     {
-        $terverifikasi = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', '!=', '0']])->get()->count();
-        $proses = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', 'proses']])->get()->count();
-        $selesai = Pengaduan::where([['nik', Auth::guard('masyarakat')->user()->nik], ['status', 'selesai']])->get()->count();
+        $terverifikasi = Keluhan::where([['npm', Auth::guard('mahasiswa')->user()->npm], ['status', '!=', '0']])->get()->count();
+        $proses = Keluhan::where([['npm', Auth::guard('mahasiswa')->user()->npm], ['status', 'proses']])->get()->count();
+        $selesai = Keluhan::where([['npm', Auth::guard('mahasiswa')->user()->npm], ['status', 'selesai']])->get()->count();
 
         $hitung = [$terverifikasi, $proses, $selesai];
 
         if ($who == 'saya') {
 
-            $pengaduan = Pengaduan::where('nik', Auth::guard('masyarakat')->user()->nik)->orderBy('tgl_pengaduan', 'desc')->get();
+            $keluhan = Keluhan::where('npm', Auth::guard('mahasiswa')->user()->npm)->orderBy('tgl_keluhan', 'desc')->get();
 
-            return view('pages.user.laporan', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'who' => $who]);
+            return view('pages.user.laporan', ['keluhan' => $keluhan, 'hitung' => $hitung, 'who' => $who]);
         } else {
 
-            $pengaduan = Pengaduan::where('status', '!=', '0')->orderBy('tgl_pengaduan', 'desc')->get();
+            $keluhan = Keluhan::where('status', '!=', '0')->orderBy('tgl_keluhan', 'desc')->get();
 
-            return view('pages.user.laporan', ['pengaduan' => $pengaduan, 'hitung' => $hitung, 'who' => $who]);
+            return view('pages.user.laporan', ['keluhan' => $keluhan, 'hitung' => $hitung, 'who' => $who]);
         }
     }
 
-    public function detailPengaduan($id_pengaduan)
+    public function detailkeluhan($id_keluhan)
     {
-        $pengaduan = Pengaduan::where('id_pengaduan', $id_pengaduan)->first();
+        $keluhan = Keluhan::where('id_keluhan', $id_keluhan)->first();
 
-        return view('pages.user.detail', ['pengaduan' => $pengaduan]);
+        return view('pages.user.detail', ['keluhan' => $keluhan]);
     }
 
-    public function laporanEdit($id_pengaduan)
+    public function laporanEdit($id_keluhan)
     {
-        $pengaduan = Pengaduan::where('id_pengaduan', $id_pengaduan)->first();
+        $keluhan = Keluhan::where('id_keluhan', $id_keluhan)->first();
 
-        return view('user.edit', ['pengaduan' => $pengaduan]);
+        return view('user.edit', ['keluhan' => $keluhan]);
     }
 
-    public function laporanUpdate(Request $request, $id_pengaduan)
+    public function laporanUpdate(Request $request, $id_keluhan)
     {
         $data = $request->all();
 
         $validate = Validator::make($data, [
-            'judul_laporan' => ['required'],
-            'isi_laporan' => ['required'],
-            'tgl_kejadian' => ['required'],
-            'lokasi_kejadian' => ['required'],
+            'judul_keluhan' => ['required'],
+            'isi_keluhan' => ['required'],
+            //'tgl_keluhan' => ['required'],
             // 'id_kategori' => ['required'],
         ]);
 
@@ -303,28 +300,27 @@ class UserController extends Controller
         }
 
         if ($request->file('foto')) {
-            $data['foto'] = $request->file('foto')->store('assets/pengaduan', 'public');
+            $data['foto'] = $request->file('foto')->store('assets/keluhan', 'public');
         }
 
-        $pengaduan = Pengaduan::where('id_pengaduan', $id_pengaduan)->first();
+        $keluhan = Keluhan::where('id_keluhan', $id_keluhan)->first();
 
-        $pengaduan->update([
-            'judul_laporan' => $data['judul_laporan'],
-            'isi_laporan' => $data['isi_laporan'],
-            'tgl_kejadian' => $data['tgl_kejadian'],
-            'lokasi_kejadian' => $data['lokasi_kejadian'],
+        $keluhan->update([
+            'judul_keluhan' => $data['judul_keluhan'],
+            'isi_keluhan' => $data['isi_keluhan'],
+            //'tgl_keluhan' => $data['tgl_keluhan'],
             // 'id_kategori' => $data['kategori_kejadian'],
-            'foto' => $data['foto'] ?? $pengaduan->foto
+            'foto' => $data['foto'] ?? $keluhan->foto
         ]);
 
-        return redirect()->route('pekat.detail', $id_pengaduan);
+        return redirect()->route('pekat.detail', $id_keluhan);
     }
 
     public function laporanDestroy(Request $request)
     {
-        $pengaduan = Pengaduan::where('id_pengaduan', $request->id_pengaduan)->first();
+        $keluhan = Keluhan::where('id_keluhan', $request->id_keluhan)->first();
 
-        $pengaduan->delete();
+        $keluhan->delete();
 
         return 'success';
     }
@@ -339,7 +335,7 @@ class UserController extends Controller
     {
         $data = $request->all();
 
-        if (Auth::guard('masyarakat')->user()->password == null) {
+        if (Auth::guard('mahasiswa')->user()->password == null) {
             $validate = Validator::make($data, [
                 'password' => ['required', 'min:6', 'confirmed'],
             ]);
@@ -354,19 +350,19 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validate);
         }
 
-        $nik = Auth::guard('masyarakat')->user()->nik;
+        $npm = Auth::guard('mahasiswa')->user()->npm;
 
-        $masyarakat = Masyarakat::where('nik', $nik)->first();
+        $mahasiswa = Mahasiswa::where('npm', $npm)->first();
 
-        if (Auth::guard('masyarakat')->user()->password == null) {
-            $masyarakat->password = Hash::make($data['password']);
-            $masyarakat->save();
+        if (Auth::guard('mahasiswa')->user()->password == null) {
+            $mahasiswa->password = Hash::make($data['password']);
+            $mahasiswa->save();
 
             return redirect()->back()->with(['pesan' => 'Password berhasil diubah!', 'type' => 'success']);
-        } elseif (Hash::check($data['old_password'], $masyarakat->password)) {
+        } elseif (Hash::check($data['old_password'], $mahasiswa->password)) {
 
-            $masyarakat->password = Hash::make($data['password']);
-            $masyarakat->save();
+            $mahasiswa->password = Hash::make($data['password']);
+            $mahasiswa->save();
 
             return redirect()->back()->with(['pesan' => 'Password berhasil diubah!', 'type' => 'success']);
         } else {
@@ -377,10 +373,10 @@ class UserController extends Controller
     public function ubah(Request $request, $what)
     {
         if ($what == 'email') {
-            $masyarakat = Masyarakat::where('nik', $request->nik)->first();
+            $mahasiswa = Mahasiswa::where('npm', $request->npm)->first();
 
-            $masyarakat->email = $request->email;
-            $masyarakat->save();
+            $mahasiswa->email = $request->email;
+            $mahasiswa->save();
 
             return 'success';
         } elseif ($what == 'telp') {
@@ -393,10 +389,10 @@ class UserController extends Controller
                 return 'error';
             }
 
-            $masyarakat = Masyarakat::where('nik', $request->nik)->first();
+            $mahasiswa = Mahasiswa::where('npm', $request->npm)->first();
 
-            $masyarakat->telp = $request->telp;
-            $masyarakat->save();
+            $mahasiswa->telp = $request->telp;
+            $mahasiswa->save();
 
             return 'success';
         }
@@ -404,24 +400,24 @@ class UserController extends Controller
 
     public function profil()
     {
-        $nik = Auth::guard('masyarakat')->user()->nik;
+        $npm = Auth::guard('mahasiswa')->user()->npm;
 
-        $masyarakat = Masyarakat::where('nik', $nik)->first();
+        $mahasiswa = Mahasiswa::where('npm', $npm)->first();
 
-        return view('user.profil', ['masyarakat' => $masyarakat]);
+        return view('user.profil', ['mahasiswa' => $mahasiswa]);
     }
 
     public function updateProfil(Request $request)
     {
-        $nik = Auth::guard('masyarakat')->user()->nik;
+        $npm = Auth::guard('mahasiswa')->user()->npm;
 
         $data = $request->all();
 
         $validate = Validator::make($data, [
-            'nik' => ['sometimes', 'required', 'min:16', 'max:16', Rule::unique('masyarakat')->ignore($nik, 'nik')],
+            'npm' => ['sometimes', 'required', 'min:16', 'max:16', Rule::unique('mahasiswa')->ignore($npm, 'npm')],
             'nama' => ['required', 'string'],
-            'email' => ['sometimes', 'required', 'email', 'string', Rule::unique('masyarakat')->ignore($nik, 'nik')],
-            'username' => ['sometimes', 'required', 'string', 'regex:/^\S*$/u', Rule::unique('masyarakat')->ignore($nik, 'nik'), 'unique:petugas,username'],
+            'email' => ['sometimes', 'required', 'email', 'string', Rule::unique('mahasiswa')->ignore($npm, 'npm')],
+            'username' => ['sometimes', 'required', 'string', 'regex:/^\S*$/u', Rule::unique('mahasiswa')->ignore($npm, 'npm'), 'unique:petugas,username'],
             'jenis_kelamin' => ['required'],
             'telp' => ['required', 'regex:/(08)[0-9]/'],
             'alamat' => ['required'],
@@ -438,10 +434,10 @@ class UserController extends Controller
             return redirect()->back()->withErrors($validate);
         }
 
-        $masyarakat = Masyarakat::where('nik', $nik);
+        $mahasiswa = Mahasiswa::where('npm', $npm);
 
-        $masyarakat->update([
-            'nik' => $data['nik'],
+        $mahasiswa->update([
+            'npm' => $data['npm'],
             'nama' => $data['nama'],
             'email' => $data['email'],
             'username' => strtolower($data['username']),

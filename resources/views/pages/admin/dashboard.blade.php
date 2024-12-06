@@ -29,8 +29,8 @@
                       <div class="card-body">
                         <div class="row">
                           <div class="col">
-                            <h5 class="card-title text-uppercase text-muted mb-0">Semua Pengaduan</h5>
-                            <span class="h2 font-weight-bold mb-0">{{ $pengaduan }}</span>
+                            <h5 class="card-title text-uppercase text-muted mb-0">Semua Keluhan</h5>
+                            <span class="h2 font-weight-bold mb-0">{{ $keluhan }}</span>
                           </div>
                           <div class="col-auto">
                             <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
@@ -85,8 +85,8 @@
                       <div class="card-body">
                         <div class="row">
                           <div class="col">
-                            <h5 class="card-title text-uppercase text-muted mb-0">Total Masyarakat</h5>
-                            <span class="h2 font-weight-bold mb-0">{{ $masyarakat }}</span>
+                            <h5 class="card-title text-uppercase text-muted mb-0">Total Mahasiswa</h5>
+                            <span class="h2 font-weight-bold mb-0">{{ $mahasiswa }}</span>
                           </div>
                           <div class="col-auto">
                             <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">

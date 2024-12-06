@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Masyarakat')
+@section('title', 'Keluhan')
 
 
 @push('addon-style')
@@ -12,11 +12,11 @@
           <div class="header-body">
             <div class="row align-items-center py-4">
               <div class="col-lg-6 col-7">
-                <h6 class="h2 text-white d-inline-block mb-0">Masyarakat</h6>
+                <h6 class="h2 text-white d-inline-block mb-0">Keluhan</h6>
                 <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                   {{-- <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                     <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
-                    <li class="breadcrumb-item"><a href="#">Masyarakat</a></li>
+                    <li class="breadcrumb-item"><a href="#">keluhan</a></li>
                   </ol> --}}
                 </nav>
               </div>
@@ -30,37 +30,55 @@
           <div class="col">
             <div class="card">
               <!-- Card header -->
-              <div class="card-header border-0 d-flex justify-content-between">
-                <h3 class="mb-0">Data Masyarakat</h3>
+              <div class="card-header border-0">
+                <h3 class="mb-0">Data Keluhan</h3>
               </div>
               <!-- Light table -->
               <div class="table-responsive">
-                <table class="table align-items-center table-flush" id="pengaduanTable">
+                <table class="table align-items-center table-flush" id="keluhanTable">
                   <thead class="thead-light">
                     <tr>
                       <th scope="col" class="sort" data-sort="no">No</th>
-                      <th scope="col" class="sort" data-sort="no">NIK</th>
+                      <th scope="col" class="sort" data-sort="tanggal">Tanggal</th>
                       <th scope="col" class="sort" data-sort="name">Nama</th>
-                      <th scope="col" class="sort" data-sort="username">username</th>
-                      <th scope="col" class="sort" data-sort="tlp">No Telpon</th>
+                      <th scope="col" class="sort" data-sort="isi">Isi Keluhan</th>
+                      <th scope="col" class="sort" data-sort="status">Status</th>
                       <th scope="col" class="sort" data-sort="action">Aksi</th>
                     </tr>
                   </thead>
                   <tbody class="list">
-                      @foreach($masyarakat as $k => $mas)
+                      @foreach($keluhan as $k => $v)
 
                       <tr>
                         <td class="budget">
                             <span class="text-sm">{{ $k += 1}}</span>
                         </td>
-                        <td><span class="text-sm">{{ $mas->nik}}</span></td>
-                        <td><span class="text-sm">{{ $mas->name}}</span></td>
-                        <td><span class="text-sm">{{ $mas->username}}</span></td>
-                        <td><span class="text-sm">{{ $mas->telp}}</span></td>
-                        <td style="width: 100px;">
-                            <a href="{{ route('masyarakat.show', $mas->nik)}}" class="btn btn-sm btn-info">Detail</a>
-                            <a href="#" data-nik="{{ $mas->nik }}" class="btn btn-sm btn-danger masyarakatDelete">Hapus</a>
+                        <td>
+                            <span class="text-sm">{{ \Carbon\Carbon::parse($v->tgl_keluhan)->format('d-m-Y') }}</span>
                         </td>
+                        <td><span class="text-sm">{{ $v->user->name}}</span></td>
+                        <td>
+                            <span class="text-sm">{{ Str::limit($v->isi_keluhan, 30)}}</span>
+                        </td>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            @if($v->status == '0')
+                                <span class="text-sm badge badge-danger">Pending</span>
+                            @elseif($v->status == 'proses')
+                                <span class="text-sm badge badge-warning">Proses</span>
+                            @else
+                                <span class="text-sm badge badge-success">Selesai</span>
+                            @endif
+                          </div>
+                        </td>
+                        @if ($status == '0')
+                            <td>
+                                <a href="#" data-id_keluhan="{{ $v->id_keluhan }}" class="btn btn-primary keluhan">Verifikasi</a>
+                                <a href="#" data-id_keluhan="{{ $v->id_keluhan }}" class="btn btn-danger keluhanDelete">Hapus</a>
+                            </td>
+                        @else
+                            <td><a href="{{ route('keluhan.show', $v->id_keluhan)}}" class="btn btn-info">Lihat</a></td>
+                        @endif
                       </tr>
 
                       @endforeach
@@ -101,26 +119,24 @@
 
 @push('addon-script')
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
-
 <script>
     $(document).ready(function() {
-        $('#pengaduanTable').DataTable();
+        $('#keluhanTable').DataTable();
     } );
 </script>
 
 <script>
-
     $(document).on('click', '#del', function(e) {
         let id = $(this).data('userId');
         console.log(id);
     });
 
-    $(document).on('click', '.masyarakatDelete', function (e) {
+    $(document).on('click', '.keluhan', function (e) {
         e.preventDefault();
-        let nik = $(this).data('nik');
+        let id_keluhan = $(this).data('id_keluhan');
         Swal.fire({
                 title: 'Peringatan!',
-                text: "Apakah Anda yakin akan menghapus masyarakat?",
+                text: "Apakah Anda yakin akan memverifikasi keluhan?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#28B7B5',
@@ -128,17 +144,19 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    type: "DELETE",
-                    url: '{{ route('masyarakat.destroy', 'nik') }}',
+                    type: "POST",
+                    url: '{{ route('tanggapan') }}',
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        "nik": nik,
+                        "id_keluhan": id_keluhan,
+                        "status": "proses",
+                        "tanggapan": ''
                     },
                     success: function (response) {
                         if (response == 'success') {
                             Swal.fire({
                                 title: 'Pemberitahuan!',
-                                text: "Masyarakat berhasil dihapus!",
+                                text: "keluhan berhasil diverifikasi!",
                                 icon: 'success',
                                 confirmButtonColor: '#28B7B5',
                                 confirmButtonText: 'OK',
@@ -154,7 +172,7 @@
                     error: function (data) {
                         Swal.fire({
                             title: 'Pemberitahuan!',
-                            text: "Masyarakat gagal dihapus!",
+                            text: "keluhan gagal diverifikasi!",
                             icon: 'error',
                             confirmButtonColor: '#28B7B5',
                             confirmButtonText: 'OK',
@@ -164,7 +182,65 @@
             } else {
                 Swal.fire({
                     title: 'Pemberitahuan!',
-                    text: "Masyarakat gagal dihapus!",
+                    text: "keluhan gagal diverifikasi!",
+                    icon: 'error',
+                    confirmButtonColor: '#28B7B5',
+                    confirmButtonText: 'OK',
+                });
+            }
+        });
+    });
+
+    $(document).on('click', '.keluhanDelete', function (e) {
+        e.preventDefault();
+        let id_keluhan = $(this).data('id_keluhan');
+        Swal.fire({
+                title: 'Peringatan!',
+                text: "Apakah Anda yakin akan menghapus keluhan?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#28B7B5',
+                confirmButtonText: 'OK',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "DELETE",
+                    url: '{{ route('keluhan.delete', 'id_keluhan') }}',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "id_keluhan": id_keluhan,
+                    },
+                    success: function (response) {
+                        if (response == 'success') {
+                            Swal.fire({
+                                title: 'Pemberitahuan!',
+                                text: "keluhan berhasil dihapus!",
+                                icon: 'success',
+                                confirmButtonColor: '#28B7B5',
+                                confirmButtonText: 'OK',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }else{
+                                    location.reload();
+                                }
+                            });
+                        }
+                    },
+                    error: function (data) {
+                        Swal.fire({
+                            title: 'Pemberitahuan!',
+                            text: "keluhan gagal dihapus!",
+                            icon: 'error',
+                            confirmButtonColor: '#28B7B5',
+                            confirmButtonText: 'OK',
+                        });
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Pemberitahuan!',
+                    text: "keluhan gagal dihapus!",
                     icon: 'error',
                     confirmButtonColor: '#28B7B5',
                     confirmButtonText: 'OK',

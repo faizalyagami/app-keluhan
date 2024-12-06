@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'Pengaduan')
+@section('title', 'Keluhan')
 
 
 @push('addon-style')
@@ -31,48 +31,43 @@
           <div class="col-xl-12 order-xl-1">
             <div class="card">
               <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
-                <h3>Data Pengaduan</h3>
+                <h3>Data Keluhan</h3>
               </div>
               <div class="card-body">
                 <table class="table">
                     <tbody>
                         <tr>
-                            <th>NIK</th>
+                            <th>NPM</th>
                             <td>:</td>
-                            <td>{{ $pengaduan->nik }}</td>
+                            <td>{{ $keluhan->npm }}</td>
                         </tr>
                         <tr>
                             <th>Nama</th>
                             <td>:</td>
-                            <td>{{ $pengaduan->user->name }}</td>
+                            <td>{{ $keluhan->user->name }}</td>
                         </tr>
                         <tr>
-                            <th>Tanggal Pengaduan</th>
+                            <th>Tanggal Keluhan</th>
                             <td>:</td>
-                            <td>{{ \Carbon\Carbon::parse($pengaduan->tgl_pengaduan)->format('d-m-Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($keluhan->tgl_keluhan)->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
-                            <th>Judul Laporan</th>
+                            <th>Judul Keluhan</th>
                             <td>:</td>
-                            <td>{{ $pengaduan->judul_laporan }}</td>
+                            <td>{{ $keluhan->judul_keluhan }}</td>
                         </tr>
                         <tr>
-                            <th>Isi Laporan</th>
+                            <th>Isi Keluhan</th>
                             <td>:</td>
-                            <td>{{ $pengaduan->isi_laporan }}</td>
-                        </tr>
-                        <tr>
-                            <th>Tanggal Kejadian</th>
-                            <td>:</td>
-                            <td>{{ \Carbon\Carbon::parse($pengaduan->tgl_kejadian)->format('d-m-Y') }}</td>
+                            <td>{{ $keluhan->isi_keluhan }}</td>
                         </tr>
                         <tr>
                             <th>Status</th>
                             <td>:</td>
                             <td>
-                                @if($pengaduan->status == '0')
+                                @if($keluhan->status == '0')
                                     <span class="text-sm badge badge-danger">Pending</span>
-                                @elseif($pengaduan->status == 'proses')
+                                @elseif($keluhan->status == 'proses')
                                     <span class="text-sm badge badge-warning">Proses</span>
                                 @else
                                     <span class="text-sm badge badge-success">Selesai</span>
@@ -80,19 +75,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Lokasi Kejadian</th>
-                            <td>:</td>
-                            <td>{{ $pengaduan->lokasi_kejadian }}</td>
-                        </tr>
-                        <tr>
-                          <th>Foto Kejadian</th>
+                          <th>Bukti Keluhan</th>
                           <td>:</td>
-                          <td><img src="{{ Storage::url($pengaduan->foto) }} " class="card-img"></td>
+                          <td><img src="{{ Storage::url($keluhan->foto) }} " class="card-img"></td>
                         </tr>
                         {{-- <tr>
-                            <th>Hapus Pengaduan</th>
+                            <th>Hapus keluhan</th>
                             <td>:</td>
-                            <td><a href="#" class="btn btn-danger pengaduan">Hapus</a></td>
+                            <td><a href="#" class="btn btn-danger keluhan">Hapus</a></td>
                         </tr> --}}
                     </tbody>
                 </table>
@@ -111,17 +101,17 @@
               <div class="card-body">
                 <form action="{{ route('tanggapan')}} " method="POST">
                     @csrf
-                    <input type="hidden" name="id_pengaduan" value="{{ $pengaduan->id_pengaduan }}">
+                    <input type="hidden" name="id_keluhan" value="{{ $keluhan->id_keluhan }}">
                   <!-- Tanggapan -->
                   <div class="">
                     <div class="form-group">
                         <label for="status">Status</label>
                         <select name="status" class="form-control" id="status">
-                            @if ($pengaduan->status == '0')
+                            @if ($keluhan->status == '0')
                                 <option selected value="0">Pending</option>
                                 <option value="proses">Proses</option>
                                 <option value="selesai">Selesai</option>
-                            @elseif($pengaduan->status == 'proses')
+                            @elseif($keluhan->status == 'proses')
                                 <option value="0">Pending</option>
                                 <option selected value="proses">Proses</option>
                                 <option value="selesai">Selesai</option>
@@ -151,7 +141,7 @@
 <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#pengaduanTable').DataTable();
+        $('#keluhanTable').DataTable();
     } );
 </script>
 @if (session()->has('status'))

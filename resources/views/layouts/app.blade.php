@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>@yield('title') | Pengaduan Masyarakat</title>
+  <title>@yield('title') | Keluhan Mahasiswa</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -44,7 +44,7 @@
         <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
         <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
         <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></i></a>
+        <a href="#" class="globe"><i class="bi bi-globe"></i></i></a>
       </div>
     </div>
   </div> -->
@@ -52,20 +52,20 @@
    <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
 
-      <h1 class="logo me-auto"><a href="/">Pengaduan Masyarakat</a></h1>
+      <h1 class="logo me-auto"><a href="/">Keluhan Mahasiswa</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav id="navbar" class="navbar order-last order-lg-0 ">
         <ul>
-          <li><a class="nav-link scrollto {{ (request()->is('/pengaduan')) ? 'active' : '' }}" href="{{ route('pengaduan')}}">Buat Pengaduan</a></li>
+          <li><a class="nav-link scrollto {{ (request()->is('/keluhan')) ? 'active' : '' }}" href="{{ route('keluhan')}}">Buat Keluhan</a></li>
           {{-- <li><a class="nav-link scrollto {{ (request()->is('tentang')) ? 'active' : '' }}" href="{{ url('tentang')}}">Tentang</a></li> --}}
-          <li><a class="nav-link scrollto {{ (request()->is('pengaduan.laporan')) ? 'active' : '' }}" href="{{ route('pengaduan.laporan', 'saya')}}">Pengaduan Saya</a></li>
+          <li><a class="nav-link scrollto {{ (request()->is('keluhan.laporan')) ? 'active' : '' }}" href="{{ route('keluhan.laporan', 'saya')}}">Keluhan Saya</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
-      @auth('masyarakat')
+      @auth('mahasiswa')
         <a href="{{ route('user.logout')}}" class="appointment-btn scrollto">Logout</a>
       @else
         <a href="{{ url('login')}}" class="appointment-btn scrollto">Login</a>
@@ -84,10 +84,10 @@
         <div class="row justify-content-between">
 
           <div class="col-lg-3 col-md-6 footer-contact">
-            <h3>Pengaduan Masyarakat</h3>
+            <h3>Keluhan Mahasiswa</h3>
             <p>
-              Bayu Prayoga<br>
-              SMK Informatika Utama<br>
+              Fakultas Psikologi<br>
+              Universitas Islam Bandung<br>
 
             </p>
           </div>
@@ -105,8 +105,8 @@
             <h4>Kontak</h4>
             <ul>
               <p>
-                <strong>Phone:</strong> +62 85526289490<br>
-                <strong>Email:</strong> prayogabayu062@gmail.com<br>
+                <strong>Phone:</strong> +62 818171172<br>
+                <strong>Email:</strong> fapsiunisba@gmail.com<br>
               </p>
             </ul>
           </div>
@@ -119,13 +119,12 @@
 
       <div class="me-md-auto my-auto text-center text-md-start">
         <div class="copyright">
-          &copy; Copyright <strong><span><a href="" target="_blank">Bayu Prayoga</a></span></strong>. SMK Informatika Utama
+          &copy; Copyright <strong><span><a href="" target="_blank">Fakultas Psikologi</a></span></strong>. Universitas Islam Bandung
         </div>
       </div>
       <div class="social-links text-center text-md-right pt-3 pt-md-0">
-        <a href="https://github.com/BayuPrayoga62" class="github"><i class="bx bxl-github"></i></a>
-        <a href="https://www.instagram.com/ubayprayoga_/" class="instagram"><i class="bx bxl-instagram"></i></a>
-        <a href="https://www.linkedin.com/in/bayu-prayoga-b000a121a" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+        <a href="https://www.instagram.com/psikologi_unisba/" class="instagram"><i class="bx bxl-instagram"></i></a>
+        <a href="https://psikologi.unisba.ac.id/" class="globe"><i class="bx bxl-globe"></i></a>
       </div>
     </div>
   </footer><!-- End Footer -->

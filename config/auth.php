@@ -41,9 +41,9 @@ return [
             'provider' => 'users',
         ],
 
-        'masyarakat' => [
+        'mahasiswa' => [
             'driver' => 'session',
-            'provider' => 'masyarakats',
+            'provider' => 'mahasiswas',
         ],
 
         'admin' => [
@@ -75,9 +75,9 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        'masyarakats' => [
+        'mahasiswas' => [
             'driver' => 'eloquent',
-            'model' => \App\Models\Masyarakat::class,
+            'model' => \App\Models\Mahasiswa::class,
         ],
 
         'admins' => [

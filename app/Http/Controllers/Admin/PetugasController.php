@@ -46,7 +46,7 @@ class PetugasController extends Controller
 
         $validate = Validator::make($data, [
             'nama_petugas' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'regex:/^\S*$/u', 'unique:petugas', 'unique:masyarakat,username'],
+            'username' => ['required', 'string', 'regex:/^\S*$/u', 'unique:petugas', 'unique:mahasiswa,username'],
             'password' => ['required', 'string', 'min:6'],
             'telp' => ['required'],
             'roles' => ['required', 'in:admin,petugas'],
@@ -58,7 +58,7 @@ class PetugasController extends Controller
 
         $username = Petugas::where('username', $data['username'])->first();
 
-        if($username){
+        if ($username) {
             return redirect()->back()->with(['notif' => 'Username Telah Digunakan!']);
         }
 
@@ -113,7 +113,7 @@ class PetugasController extends Controller
 
         $validate = Validator::make($data, [
             'nama_petugas' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'regex:/^\S*$/u', Rule::unique('petugas')->ignore($id_petugas, 'id_petugas'), 'unique:masyarakat,username'],
+            'username' => ['required', 'string', 'regex:/^\S*$/u', Rule::unique('petugas')->ignore($id_petugas, 'id_petugas'), 'unique:mahasiswa,username'],
             'telp' => ['required'],
             'roles' => ['required', 'in:admin,petugas'],
         ]);
@@ -124,7 +124,7 @@ class PetugasController extends Controller
 
         $petugas = Petugas::find($id_petugas);
 
-        if($data['password'] != null){
+        if ($data['password'] != null) {
             $password = Hash::make($data['password']);
         }
 
@@ -151,7 +151,7 @@ class PetugasController extends Controller
     public function destroy(Request $request, $id_petugas)
     {
 
-        if($id_petugas = 'id_petugas') {
+        if ($id_petugas = 'id_petugas') {
             $id_petugas = $request->id_petugas;
         }
 
@@ -159,7 +159,7 @@ class PetugasController extends Controller
 
         $petugas->delete();
 
-        if($request->ajax()) {
+        if ($request->ajax()) {
             return 'success';
         }
 

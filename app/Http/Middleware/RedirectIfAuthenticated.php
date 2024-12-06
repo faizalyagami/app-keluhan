@@ -27,7 +27,7 @@ class RedirectIfAuthenticated
         //     }
         // }
 
-        if (!Auth::guard('masyarakat')->check()) {
+        if (!Auth::guard('mahasiswa')->check()) {
             return $next($request);
         }
 

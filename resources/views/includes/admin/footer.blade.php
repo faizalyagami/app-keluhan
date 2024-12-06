@@ -4,7 +4,7 @@
       <div class="row align-items-center justify-content-lg-between">
         <div class="col">
           <div class="copyright text-center text-muted">
-            &copy; 2023 <a href="" class="font-weight-bold ml-1" target="_blank">Bayu Prayoga</a>
+            &copy; 2024 <a href="" class="font-weight-bold ml-1" target="_blank">Fakultas Psikologi</a>
           </div>
         </div>
         <!-- <div class="col-lg-6">

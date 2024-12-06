@@ -4,7 +4,7 @@
       <!-- Brand -->
       <div class="sidenav-header  align-items-center">
         <a class="navbar-brand" href="{{ route('dashboard')}}">
-          <h2 class="text-primary text-uppercase">Pengaduan UKK</h2>
+          <h2 class="text-primary text-uppercase">Keluhan Mahasiswa</h2>
         </a>
       </div>
       <div class="navbar-inner">
@@ -19,23 +19,23 @@
               </a>
             </li>
             <li class="nav-item nav-with-child">
-                <a class="nav-link {{ (request()->segment(2) == 'pengaduan') ? 'active' : '' }}" href="#">
-                  <i class="fas fa-bullhorn text-orange"></i> Pengaduan
+                <a class="nav-link {{ (request()->segment(2) == 'keluhan') ? 'active' : '' }}" href="#">
+                  <i class="fas fa-bullhorn text-orange"></i> Keluhan
                   <i class="text-right fas fa-chevron-down"></i>
                 </a>
                 <ul class="nav-item-child">
                   <li class="nav-item">
-                    <a class="nav-link {{ (request()->segment(2) == 'pengaduan/0') ? 'active' : '' }}" href="{{ route('pengaduan.index', '0')}}">
+                    <a class="nav-link {{ (request()->segment(2) == 'keluhan/0') ? 'active' : '' }}" href="{{ route('keluhan.index', '0')}}">
                         <i class="fas fa-clipboard-check text-info"></i> Verifikasi & Validasi
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="{{ route('pengaduan.index', 'proses')}}">
+                    <a class="nav-link" href="{{ route('keluhan.index', 'proses')}}">
                         <i class="fas fa-sync text-yellow"></i> Sedang Diproses
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="{{ route('pengaduan.index', 'selesai')}}">
+                    <a class="nav-link" href="{{ route('keluhan.index', 'selesai')}}">
                         <i class="fas fa-check text-success"></i> Selesai
                     </a>
                   </li>
@@ -48,9 +48,9 @@
                 </a>
               </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('masyarakat.index')}}">
+              <a class="nav-link" href="{{ route('mahasiswa.index')}}">
                 <i class="fas fa-users text-default"></i>
-                <span class="nav-link-text">Masyarakat</span>
+                <span class="nav-link-text">Mahasiswa</span>
               </a>
             </li>
             <li class="nav-item">

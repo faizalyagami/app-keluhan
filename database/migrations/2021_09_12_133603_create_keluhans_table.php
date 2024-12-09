@@ -19,7 +19,7 @@ class CreateKeluhansTable extends Migration
             $table->char('npm', 16);
             $table->string('judul_keluhan');
             $table->text('isi_keluhan');
-            $table->string('foto');
+            $table->string('foto')->nullable();
             $table->enum('status', ['0', 'proses', 'selesai']);
 
             $table->timestamps();

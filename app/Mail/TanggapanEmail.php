@@ -33,7 +33,7 @@ class TanggapanEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('muchammad.faisal@unisba.ac.id', 'Feedback')
+        return $this->from('muchammad.faisal@unisba.ac.id', 'Fakultas Psikologi UNISBA')
             ->view('pages.emails.tanggapanMail');
     }
 }

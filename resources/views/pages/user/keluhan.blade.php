@@ -15,6 +15,15 @@
         <form action="{{ route('keluhan.store')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="form-group mb-3">
+                <label for="id_struktural" class="form-label">Keluhan ditujukan kepada :</label>
+                <select name="id_struktural" id="struktural" class="form-control @error('') is-invalid @enderror" required>
+                    <option value="">--Pilih tujuan--</option>
+                    @foreach ($struktural as $item)
+                        <option value="{{ $item->id_struktural }}">{{ $item->nama_struktural }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group mb-3">
                 <label for="judul_keluhan" class="form-label">Judul Keluhan</label>
                 <input type="text" value="{{ old('judul_keluhan') }}" name="judul_keluhan" id="judul_keluhan"
                     placeholder="Ketik Judul Keluhan" class="form-control @error('judul_keluhan') is-invalid @enderror" required >

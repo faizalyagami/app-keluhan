@@ -5,10 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Keluhan;
+use App\Models\Struktural;
 use App\Models\Tanggapan;
 
 class KeluhanController extends Controller
 {
+
+    // public function create()
+    // {
+    //     $struktural = Struktural::all('struktural');
+    //     return view('pages.user.keluhan', compact('keluhan'));
+    // }
+
     public function index($status)
     {
         $keluhan = Keluhan::where('status', $status)->orderBy('tgl_keluhan', 'desc')->get();

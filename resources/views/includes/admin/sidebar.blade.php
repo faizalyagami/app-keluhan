@@ -5,6 +5,7 @@
       <div class="sidenav-header  align-items-center">
         <a class="navbar-brand" href="{{ route('dashboard')}}">
           <h2 class="text-primary text-uppercase">Keluhan Mahasiswa</h2>
+          {{-- <h4>Anda Login sebagai {{ Auth::user()->nama_petugas }}</h4> --}}
         </a>
       </div>
       <div class="navbar-inner">

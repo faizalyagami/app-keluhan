@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Mahasiswa;
+use App\Models\Struktural;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Keluhan extends Model
 {
@@ -16,6 +18,7 @@ class Keluhan extends Model
     protected $fillable = [
         'tgl_keluhan',
         'npm',
+        'id_struktural',
         'judul_keluhan',
         'isi_keluhan',
         'foto',
@@ -25,5 +28,10 @@ class Keluhan extends Model
     public function user()
     {
         return $this->hasOne(Mahasiswa::class, 'npm', 'npm');
+    }
+
+    public function struktural()
+    {
+        return $this->belongsTo(Struktural::class, 'id_struktural', 'id_struktural');
     }
 }

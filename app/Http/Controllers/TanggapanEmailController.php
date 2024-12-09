@@ -31,7 +31,7 @@ class TanggapanEmailController extends Controller
             if ($request->ajax()) {
                 return 'success';
             }
-            return redirect()->route('pages.admin.keluhan.show', ['id_keluhan' => $request->id_keluhan, 'keluhan' => $keluhan, 'tanggapan' => $tanggapan])
+            return redirect()->route('keluhan.show', ['id_keluhan' => $request->id_keluhan, 'keluhan' => $keluhan, 'tanggapan' => $tanggapan])
                 ->with(['status' => 'Berhasil ditanggapi !']);
         } else {
             //buat tanggapan baru jika belum ada
@@ -41,7 +41,7 @@ class TanggapanEmailController extends Controller
                 'id_keluhan' => $request->id_keluhan,
                 'tgl_tanggapan' => now(),
                 'tanggapan' => $request->tanggapan ?? '',
-                'id_petugas' => Auth::guard('admin')->user->id_petugas
+                'id_petugas' => Auth::guard('admin')->user()->id_petugas
             ]);
 
             //Kirim email kepada user
@@ -50,7 +50,7 @@ class TanggapanEmailController extends Controller
             if ($request->ajax()) {
                 return 'success';
             }
-            return redirect()->route('pages.admin.keluhan.show', ['id_keluhan' => $request->id_keluhan, 'keluhan' => $keluhan, 'tanggapan' => $tanggapan])
+            return redirect()->route('keluhan.show', ['id_keluhan' => $request->id_keluhan, 'keluhan' => $keluhan, 'tanggapan' => $tanggapan])
                 ->with(['status' => 'Berhasil Ditanggapi!']);
         }
     }

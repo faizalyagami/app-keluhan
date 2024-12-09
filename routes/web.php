@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\KeluhanController;
+use App\Http\Controllers\Admin\TanggapanController;
+use App\Http\Controllers\TanggapanEmailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,6 +20,7 @@ Route::get('/', [\App\Http\Controllers\User\UserController::class, 'index']);
 
 Route::get('/keluhan',  [\App\Http\Controllers\User\UserController::class, 'keluhan'])->name('keluhan');
 Route::post('/keluhan/kirim',  [\App\Http\Controllers\User\UserController::class, 'storekeluhan'])->name('keluhan.store');
+//Route::get('/keluhan', [KeluhanController::class, 'create'])->name('keluhan.create');
 
 Route::get('/login',  [\App\Http\Controllers\User\UserController::class, 'masuk']);
 Route::get('/register',  [\App\Http\Controllers\User\UserController::class, 'daftar']);
@@ -68,7 +72,8 @@ Route::prefix('admin')->group(function () {
         Route::delete('keluhan/delete/{id_keluhan}', [\App\Http\Controllers\Admin\KeluhanController::class, 'destroy'])->name('keluhan.delete');
 
         // Tanggapan
-        Route::post('tanggapan', [\App\Http\Controllers\Admin\TanggapanController::class, 'response'])->name('tanggapan');
+        Route::post('tanggapan', [TanggapanEmailController::class, 'response'])->name('tanggapan');
+        //Route::post('tanggapan', [TanggapanController::class, 'response'])->name('tanggapan');
     });
 
 

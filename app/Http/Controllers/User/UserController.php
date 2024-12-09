@@ -8,6 +8,7 @@ use App\Models\Keluhan;
 use App\Models\Mahasiswa;
 use App\Models\Petugas;
 use App\Models\Province;
+use App\Models\Struktural;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -19,6 +20,8 @@ use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
+
+
     public function index()
     {
         $keluhan = Keluhan::count();
@@ -40,7 +43,8 @@ class UserController extends Controller
     public function keluhan()
     {
         $keluhan = Keluhan::get();
-        return view('pages.user.keluhan', compact('keluhan'));
+        $struktural = Struktural::all();
+        return view('pages.user.keluhan', compact('keluhan', 'struktural'));
     }
 
     public function masuk()

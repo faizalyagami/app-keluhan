@@ -16,6 +16,12 @@ class Petugas extends Authenticatable
         'username',
         'password',
         'telp',
-        'roles'
+        'roles',
+        'id_struktural'
     ];
+
+    public function struktural()
+    {
+        return $this->belongsTo(Struktural::class, 'id_struktural', 'id_struktural');
+    }
 }

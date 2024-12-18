@@ -49,9 +49,8 @@ Route::middleware(['isMahasiswa'])->group(function () {
     Route::get('/keluhan-detail/{id_keluhan}', [\App\Http\Controllers\User\UserController::class, 'detailkeluhan'])->name('keluhan.detail');
 });
 
-
 Route::prefix('admin')->group(function () {
-    Route::middleware('isAdmin')->group(function () {
+    Route::middleware(['auth:admin', 'isAdmin'])->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('/petugas', \App\Http\Controllers\Admin\PetugasController::class);
@@ -62,7 +61,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/laporan/export', [\App\Http\Controllers\Admin\LaporanController::class, 'export'])->name('laporan.export');
     });
 
-    Route::middleware('isPetugas')->group(function () {
+    Route::middleware(['auth:admin', 'isPetugas'])->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
         Route::get('/logout', [\App\Http\Controllers\Admin\AdminController::class, 'logout'])->name('admin.logout');
 

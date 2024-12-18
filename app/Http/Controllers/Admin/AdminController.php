@@ -10,12 +10,22 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function formLogin() {
+    public function formLogin()
+    {
         return view('pages.user.login');
     }
 
     public function login(Request $request)
     {
+
+        $credentials = $request->only('username', 'password');
+
+        if (Auth::guard('admin')->attempt($credentials)) {
+            return redirect()->route('dashboard');
+        }
+
+        return redirect()->back()->with(['pesan' => 'Username atau Password salah!']);
+
         $username = Petugas::where('username', $request->username)->first();
 
         if (!$username) {
@@ -37,7 +47,8 @@ class AdminController extends Controller
         }
     }
 
-    public function logout() {
+    public function logout()
+    {
         Auth::guard('admin')->logout();
 
         return redirect()->route('admin.masuk');

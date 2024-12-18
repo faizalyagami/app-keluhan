@@ -7,20 +7,16 @@ use Illuminate\Http\Request;
 use App\Models\Keluhan;
 use App\Models\Struktural;
 use App\Models\Tanggapan;
+use Illuminate\Support\Facades\Auth;
 
 class KeluhanController extends Controller
 {
 
-    // public function create()
-    // {
-    //     $struktural = Struktural::all('struktural');
-    //     return view('pages.user.keluhan', compact('keluhan'));
-    // }
-
     public function index($status)
     {
         $keluhan = Keluhan::where('status', $status)->orderBy('tgl_keluhan', 'desc')->get();
-        // dd($satus);
+
+        $loggedPetugas = Auth::guard('petugas')->user();
 
         return view('pages.admin.keluhan.index', compact('keluhan', 'status'));
     }

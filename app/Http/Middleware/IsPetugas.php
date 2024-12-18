@@ -20,7 +20,7 @@ class IsPetugas
         if (Auth::guard('admin')->check()) {
             if (Auth::guard('admin')->user()->roles == 'petugas') {
                 return $next($request);
-            } elseif (Auth::guard('admin')->user()->roles == 'admin') {
+            } elseif (Auth::guard('admin')->user()->roles === 'admin') {
                 return $next($request);
             }
         }

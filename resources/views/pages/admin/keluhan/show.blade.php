@@ -42,6 +42,11 @@
                             <td>{{ $keluhan->npm }}</td>
                         </tr>
                         <tr>
+                            <th>Keluhan ditujukan kepada</th>
+                            <td>:</td>
+                            <td>{{ $keluhan->struktural->nama_struktural }}</td>
+                        </tr>
+                        <tr>
                             <th>Nama</th>
                             <td>:</td>
                             <td>{{ $keluhan->user->name }}</td>

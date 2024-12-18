@@ -218,6 +218,7 @@ class UserController extends Controller
         $validate = Validator::make($data, [
             'judul_keluhan' => ['required'],
             'isi_keluhan' => ['required'],
+            'id_struktural' => ['required', 'exists:struktural,id_struktural'],
             //'tgl_keluhan' => ['required'],
             // 'id_kategori' => ['required'],
         ]);
@@ -238,6 +239,7 @@ class UserController extends Controller
             'npm' => Auth::guard('mahasiswa')->user()->npm,
             'judul_keluhan' => $data['judul_keluhan'],
             'isi_keluhan' => $data['isi_keluhan'],
+            'id_struktural' => $data['id_struktural'],
             //'tgl_keluhan' => $data['tgl_keluhan'],
             // 'id_kategori' => $data['id_kategori'],
             'foto' => $data['foto'] ?? 'assets/keluhan/tambakmekar.png',

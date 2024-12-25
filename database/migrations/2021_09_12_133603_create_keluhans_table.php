@@ -17,7 +17,7 @@ class CreateKeluhansTable extends Migration
             $table->id('id_keluhan');
             $table->dateTime('tgl_keluhan');
             $table->char('npm', 16);
-            $table->string('judul_keluhan');
+            $table->string('kategori_keluhan');
             $table->text('isi_keluhan');
             $table->string('foto')->nullable();
             $table->enum('status', ['0', 'proses', 'selesai']);

@@ -24,10 +24,20 @@
                 </select>
             </div>
             <div class="form-group mb-3">
-                <label for="judul_keluhan" class="form-label">Judul Keluhan</label>
-                <input type="text" value="{{ old('judul_keluhan') }}" name="judul_keluhan" id="judul_keluhan"
-                    placeholder="Ketik Judul Keluhan" class="form-control @error('judul_keluhan') is-invalid @enderror" required >
-                @error('judul_keluhan')
+                <label for="kategori_keluhan" class="form-label">Kategori Keluhan</label>
+                <select name="kategori_keluhan" id="kategori_keluhan" class="form-control @error('kategori_keluhan') is-invalid @enderror" required onchange="checkKategoriKeluhan()">
+                    <option value="">--Pilih Kategori Keluhan--</option>
+                    @foreach ($kategoriKeluhan as $kategori)
+                        <option value="{{ $kategori->id_kategori_keluhan }}">{{ $kategori->nama_kategori_keluhan }}</option>
+                    @endforeach
+                    <option value="lain">Lain-lain</option>
+                </select>
+            </div>
+            <!-- Input teks untuk 'Lain-lain' -->
+            <div class="form-group mb-3" id="input-lain" style="display: none;">
+                <label for="lain_keluhan">Tulis Kategori Keluhan</label>
+                <input type="text" class="form-control @error('lain_keluhan') is-invalid @enderror" id="lain_keluhan" name="lain_keluhan" placeholder="Masukkan keluhan Anda">
+                @error('lain_keluhan')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
@@ -58,8 +68,8 @@
 
             <div class="form-group mb-3">
                 <label for="foto" class="form-label">Bukti Keluhan</label>
-                <input type="file" name="foto" id="foto" class="form-control @error('file') is-invalid @enderror" required>
-                @error('file')
+                <input type="file" name="foto" id="foto" class="form-control @error('foto') is-invalid @enderror" required>
+                @error('foto')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
@@ -86,13 +96,13 @@
                 confirmButtonColor: '#28B7B5',
                 confirmButtonText: 'Masuk',
                 allowOutsideClick: false
-                }).then((result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = '{{ route('user.masuk') }}';
-                }else{
+                } else {
                     window.location.href = '{{ route('user.masuk') }}';
                 }
-                });
+            });
         </script>
     @elseif(auth('mahasiswa')->user()->email_verified_at == null && auth('mahasiswa')->user()->telp_verified_at == null)
         <script>
@@ -103,13 +113,13 @@
                 confirmButtonColor: '#28B7B5',
                 confirmButtonText: 'Ok',
                 allowOutsideClick: false
-                }).then((result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = '{{ route('user.masuk') }}';
-                }else{
+                } else {
                     window.location.href = '{{ route('user.masuk') }}';
                 }
-                });
+            });
         </script>
     @endif
 
@@ -124,4 +134,18 @@
             });
         </script>
     @endif
+
+    <script>
+        function checkKategoriKeluhan() {
+            const kategoriSelect = document.getElementById('kategori_keluhan');
+            const inputLain = document.getElementById('input-lain');
+
+            // Tampilkan input jika "Lain-lain" dipilih
+            if (kategoriSelect.value === 'lain') {
+                inputLain.style.display = 'block';
+            } else {
+                inputLain.style.display = 'none';
+            }
+        }
+    </script>
 @endpush

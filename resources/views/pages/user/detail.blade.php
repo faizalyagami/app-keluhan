@@ -16,7 +16,7 @@
             <div class="col-md-8">
                 <div class="card card-responsive p-4 border-0 shadow rounded mx-auto text-center">
                     <img src="{{ $keluhan->foto }}" alt="">
-                    <h3>{{ $keluhan->judul_keluhan }}</h3>
+                    <h3>{{ $keluhan->kategori_keluhan }}</h3>
                     <p>
                         @if($keluhan->status == '0')
                             <span class="text-sm text-white p-1 bg-danger">Pending</span>

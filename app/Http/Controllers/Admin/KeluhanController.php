@@ -23,13 +23,16 @@ class KeluhanController extends Controller
 
     public function show($id_keluhan)
     {
-        $keluhan = Keluhan::where('id_keluhan', $id_keluhan)->first();
+        $keluhan = Keluhan::with(['kategori'])->where('id_keluhan', $id_keluhan)->first();
 
         $tanggapan = Tanggapan::where('id_keluhan', $id_keluhan)->first();
 
+        $struktural = Struktural::all();
+
         return view('pages.admin.keluhan.show', [
             'keluhan' => $keluhan,
-            'tanggapan' => $tanggapan
+            'tanggapan' => $tanggapan,
+            'struktural' => $struktural
         ]);
     }
 

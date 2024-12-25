@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Mail\VerifikasiEmailUntukRegistrasiKeluhanMahasiswa;
+use App\Models\KategoriKeluhan;
 use App\Models\Keluhan;
 use App\Models\Mahasiswa;
 use App\Models\Petugas;
@@ -44,7 +45,8 @@ class UserController extends Controller
     {
         $keluhan = Keluhan::get();
         $struktural = Struktural::all();
-        return view('pages.user.keluhan', compact('keluhan', 'struktural'));
+        $kategoriKeluhan = KategoriKeluhan::all();
+        return view('pages.user.keluhan', compact('keluhan', 'struktural', 'kategoriKeluhan'));
     }
 
     public function masuk()
@@ -216,7 +218,7 @@ class UserController extends Controller
         $data = $request->all();
 
         $validate = Validator::make($data, [
-            'judul_keluhan' => ['required'],
+            'kategori_keluhan' => ['required', 'exists:kategori_keluhan,id_kategori_keluhan'],
             'isi_keluhan' => ['required'],
             'id_struktural' => ['required', 'exists:struktural,id_struktural'],
             //'tgl_keluhan' => ['required'],
@@ -237,7 +239,7 @@ class UserController extends Controller
         $keluhan = Keluhan::create([
             'tgl_keluhan' => date('Y-m-d h:i:s'),
             'npm' => Auth::guard('mahasiswa')->user()->npm,
-            'judul_keluhan' => $data['judul_keluhan'],
+            'kategori_keluhan' => $data['kategori_keluhan'],
             'isi_keluhan' => $data['isi_keluhan'],
             'id_struktural' => $data['id_struktural'],
             //'tgl_keluhan' => $data['tgl_keluhan'],
@@ -295,7 +297,7 @@ class UserController extends Controller
         $data = $request->all();
 
         $validate = Validator::make($data, [
-            'judul_keluhan' => ['required'],
+            'kategori_keluhan' => ['required'],
             'isi_keluhan' => ['required'],
             //'tgl_keluhan' => ['required'],
             // 'id_kategori' => ['required'],
@@ -312,7 +314,7 @@ class UserController extends Controller
         $keluhan = Keluhan::where('id_keluhan', $id_keluhan)->first();
 
         $keluhan->update([
-            'judul_keluhan' => $data['judul_keluhan'],
+            'kategori_keluhan' => $data['kategori_keluhan'],
             'isi_keluhan' => $data['isi_keluhan'],
             //'tgl_keluhan' => $data['tgl_keluhan'],
             // 'id_kategori' => $data['kategori_kejadian'],

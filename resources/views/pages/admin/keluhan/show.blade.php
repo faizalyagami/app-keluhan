@@ -57,9 +57,9 @@
                             <td>{{ \Carbon\Carbon::parse($keluhan->tgl_keluhan)->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
-                            <th>Judul Keluhan</th>
+                            <th>Kategori Keluhan</th>
                             <td>:</td>
-                            <td>{{ $keluhan->judul_keluhan }}</td>
+                            <td>{{ $keluhan->kategori->nama_kategori_keluhan }}</td>
                         </tr>
                         <tr>
                             <th>Isi Keluhan</th>
@@ -130,6 +130,42 @@
                     <div class="form-group">
                       <label class="form-control-label">Tanggapan</label>
                       <textarea rows="4" class="form-control" name="tanggapan" id="tanggapan" placeholder="Ketik tanggapan">{{ $tanggapan->tanggapan ?? '' }}</textarea>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary">Kirim</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xl-6 order-xl-2">
+            <div class="card">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col-8">
+                    <h3 class="mb-0">Disposisi</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <form action="{{ route('tanggapan')}} " method="POST">
+                    @csrf
+                    <input type="hidden" name="id_keluhan" value="{{ $keluhan->id_keluhan }}">
+                  <!-- Tanggapan -->
+                  <div class="">
+                    <div class="form-group">
+                        <label for="status">Disposisi kepada</label>
+                        <select name="id_struktural" id="struktural" class="form-control @error('') is-invalid @enderror" required>
+                    <option value="">--Pilih tujuan--</option>
+                    @foreach ($struktural as $item)
+                        <option value="{{ $item->id_struktural }}">{{ $item->nama_struktural }}</option>
+                    @endforeach
+                </select>
+                      </div>
+                    <div class="form-group">
+                      <label class="form-control-label">Pesan</label>
+                      <textarea rows="2" class="form-control" name="tanggapan" id="tanggapan" placeholder="Ketik pesan">{{ $tanggapan->tanggapan ?? '' }}</textarea>
                     </div>
                   </div>
 

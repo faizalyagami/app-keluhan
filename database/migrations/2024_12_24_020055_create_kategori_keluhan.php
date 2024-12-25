@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameJudulKeluhan extends Migration
+class CreateKategoriKeluhan extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class RenameJudulKeluhan extends Migration
      */
     public function up()
     {
-        Schema::table('keluhan', function (Blueprint $table) {
-            $table->renameColumn('kategori_keluhan', 'kategori_keluhan');
+        Schema::create('kategori_keluhan', function (Blueprint $table) {
+            $table->id('id_kategori_keluhan');
+            $table->string('kategori_keluhan');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +27,6 @@ class RenameJudulKeluhan extends Migration
      */
     public function down()
     {
-        Schema::table('keluhan', function (Blueprint $table) {
-            $table->renameColumn('kategori_keluhan', 'kategori_keluhan');
-        });
+        Schema::dropIfExists('kategori_keluhan');
     }
 }

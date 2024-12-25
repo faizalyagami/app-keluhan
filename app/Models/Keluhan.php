@@ -19,7 +19,7 @@ class Keluhan extends Model
         'tgl_keluhan',
         'npm',
         'id_struktural',
-        'judul_keluhan',
+        'kategori_keluhan',
         'isi_keluhan',
         'foto',
         'status',
@@ -33,5 +33,10 @@ class Keluhan extends Model
     public function struktural()
     {
         return $this->belongsTo(Struktural::class, 'id_struktural', 'id_struktural');
+    }
+
+    public function kategori()
+    {
+        return $this->belongsTo(KategoriKeluhan::class, 'kategori_keluhan', 'id_kategori_keluhan');
     }
 }

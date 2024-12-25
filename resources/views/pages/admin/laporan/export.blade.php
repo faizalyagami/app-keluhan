@@ -139,7 +139,7 @@
                 <td>{{ $k += 1 }}.</td>
                 <td>{{ Carbon\Carbon::parse($i->tgl_keluhan)->format('d-m-Y') }}</td>
                 <td>{{ $i->user->name }}</td>
-                <td>{{ $i->judul_keluhan }}</td>
+                <td>{{ $i->kategori_keluhan }}</td>
                 <td>{{ $i->isi_keluhan }}</td>
                 <td>{{ $i->status }}</td>
             </tr>

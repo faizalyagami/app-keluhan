@@ -15,6 +15,10 @@ class Keluhan extends Model
 
     protected $primaryKey = 'id_keluhan';
 
+    protected $attribbutes = [
+        'status' => '0'
+    ];
+
     protected $fillable = [
         'tgl_keluhan',
         'npm',
@@ -38,5 +42,10 @@ class Keluhan extends Model
     public function kategori()
     {
         return $this->belongsTo(KategoriKeluhan::class, 'kategori_keluhan', 'id_kategori_keluhan');
+    }
+
+    public function disposisi()
+    {
+        return $this->hasMany(Disposisi::class, 'id_struktural', 'id_struktural');
     }
 }

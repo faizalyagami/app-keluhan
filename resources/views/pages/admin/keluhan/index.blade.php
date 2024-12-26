@@ -66,6 +66,8 @@
                                 <span class="text-sm badge badge-danger">Pending</span>
                             @elseif($v->status == 'proses')
                                 <span class="text-sm badge badge-warning">Proses</span>
+                            @elseif($v->status == 'disposisi')
+                                <span class="text-sm badge badge-info">Disposisi</span>
                             @else
                                 <span class="text-sm badge badge-success">Selesai</span>
                             @endif

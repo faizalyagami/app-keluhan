@@ -74,6 +74,8 @@
                                     <span class="text-sm badge badge-danger">Pending</span>
                                 @elseif($keluhan->status == 'proses')
                                     <span class="text-sm badge badge-warning">Proses</span>
+                                @elseif($keluhan->status == 'disposisi')
+                                    <span class="text-sm badge badge-info">Disposisi</span>
                                 @else
                                     <span class="text-sm badge badge-success">Selesai</span>
                                 @endif
@@ -149,24 +151,30 @@
                 </div>
               </div>
               <div class="card-body">
-                <form action="{{ route('tanggapan')}} " method="POST">
+                <form action="{{ route('disposisi') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id_keluhan" value="{{ $keluhan->id_keluhan }}">
                   <!-- Tanggapan -->
                   <div class="">
                     <div class="form-group">
                         <label for="status">Disposisi kepada</label>
-                        <select name="id_struktural" id="struktural" class="form-control @error('') is-invalid @enderror" required>
-                    <option value="">--Pilih tujuan--</option>
-                    @foreach ($struktural as $item)
-                        <option value="{{ $item->id_struktural }}">{{ $item->nama_struktural }}</option>
-                    @endforeach
-                </select>
-                      </div>
+                        <select name="id_struktural" id="struktural" class="form-control @error('id_struktural') is-invalid @enderror" required>
+                          <option value="">--Pilih tujuan--</option>
+                          @foreach ($struktural as $item)
+                              <option value="{{ $item->id_struktural }}" {{ old('id_struktural') == $item->id_struktural ? 'selected' : '' }}>{{ $item->nama_struktural }}</option>
+                          @endforeach
+                        </select>
+                          @error('id_struktural')
+                              <span class="invalid-feedback">{{ $message }}</span>
+                          @enderror
+                    </div>
                     <div class="form-group">
                       <label class="form-control-label">Pesan</label>
-                      <textarea rows="2" class="form-control" name="tanggapan" id="tanggapan" placeholder="Ketik pesan">{{ $tanggapan->tanggapan ?? '' }}</textarea>
+                      <textarea rows="2" class="form-control" name="pesan" id="pesan" placeholder="Ketik pesan">{{ old('pesan') }}</textarea>
                     </div>
+                        @error('pesan')
+                          <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
                   </div>
 
                   <button type="submit" class="btn btn-primary">Kirim</button>

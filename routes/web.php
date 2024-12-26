@@ -82,7 +82,7 @@ Route::prefix('admin')->group(function () {
     });
 });
 
-
+Route::post('/disposisi', [KeluhanController::class, 'storeDisposisi'])->name('disposisi');
 
 // Route::get('/admin', function () {
 //     return view('pages.admin.dashboard');

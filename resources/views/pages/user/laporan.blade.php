@@ -15,9 +15,9 @@
                 @forelse($keluhan as $i)
                 <div class="col">
                     <div class="card h-100">
-                      <img src="{{ Storage::url($i->foto) }}" class="card-img-top" alt="...">
+                      {{-- <img src="{{ Storage::url($i->foto) }}" class="card-img-top" alt="..."> --}}
                       <div class="card-body">
-                        <h5 class="card-title"><b>{{ $i->kategori_keluhan }}</b></h5>
+                        <h5 class="card-title"><b>{{ $i->kategori->nama_kategori_keluhan ?? 'Kategori tidak ditemukan'}}</b></h5>
                         <p class="card-text">{{ $i->isi_keluhan }}</p>
                           <a href="{{ route('keluhan.detail', $i->id_keluhan) }}" class="btn btn-primary">Detail</a>
                       </div>

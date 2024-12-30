@@ -5,14 +5,14 @@
       <div class="sidenav-header  align-items-center">
         <a class="navbar-brand" href="{{ route('dashboard')}}">
           <h2 class="text-primary text-uppercase">Keluhan Mahasiswa</h2>
-          <p class="text-muted">Anda Login sebagai: <strong>{{ $loggedPetugas ? $loggedPetugas->nama_petugas : 'Guest' }}</strong></p>
+          <p class="text-muted">Anda Login sebagai: <br><strong>{{ $loggedPetugas ? $loggedPetugas->nama_petugas : 'Guest' }}</strong></p>
         </a>
       </div>
       <div class="navbar-inner">
         <!-- Collapse -->
         <div class="collapse navbar-collapse" id="sidenav-collapse-main">
           <!-- Nav items -->
-          <ul class="navbar-nav">
+          <ul class="navbar-nav mt-4">
             <li class="nav-item">
               <a class="nav-link {{ (request()->segment(2) == 'dashboard') ? 'active' : '' }}" href="{{ route('dashboard')}}">
                 <i class="fas fa-tv text-primary"></i>

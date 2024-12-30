@@ -41,6 +41,7 @@
                       <th scope="col" class="sort" data-sort="no">No</th>
                       <th scope="col" class="sort" data-sort="tanggal">Tanggal</th>
                       <th scope="col" class="sort" data-sort="name">Nama</th>
+                      <th scope="col" class="sort" data-sort="name">Keluhan ditujukan</th>
                       <th scope="col" class="sort" data-sort="isi">Isi Keluhan</th>
                       <th scope="col" class="sort" data-sort="status">Status</th>
                       <th scope="col" class="sort" data-sort="action">Aksi</th>
@@ -57,6 +58,11 @@
                             <span class="text-sm">{{ \Carbon\Carbon::parse($v->tgl_keluhan)->format('d-m-Y') }}</span>
                         </td>
                         <td><span class="text-sm">{{ $v->user->name}}</span></td>
+                        <td>
+                          <span class="text-sm">
+                            {{ $v->struktural->nama_struktural ?? 'Tidak ditemukan' }}
+                          </span>
+                        </td>
                         <td>
                             <span class="text-sm">{{ Str::limit($v->isi_keluhan, 30)}}</span>
                         </td>

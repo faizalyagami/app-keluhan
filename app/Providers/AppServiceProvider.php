@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer('*', function ($view) {
-            $loggedPetugas = Auth::guard('petugas')->user();
+            $loggedPetugas = Auth::guard('admin')->user();
             $view->with('loggedPetugas', $loggedPetugas);
         });
     }

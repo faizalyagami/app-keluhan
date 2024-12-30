@@ -74,12 +74,21 @@
                                     <span class="text-sm badge badge-danger">Pending</span>
                                 @elseif($keluhan->status == 'proses')
                                     <span class="text-sm badge badge-warning">Proses</span>
-                                @elseif($keluhan->status == 'disposisi')
-                                    <span class="text-sm badge badge-info">Disposisi</span>
                                 @else
                                     <span class="text-sm badge badge-success">Selesai</span>
                                 @endif
                             </td>
+                        </tr>
+                        <tr>
+                          <th>Status Disposisi</th>
+                          <td>:</td>
+                          <td>
+                            @if ($keluhan->status == 'proses' && $keluhan->disposisi->count()>0)
+                              <span class="text-sm badge badge-info">Disposisi</span>
+                            @else
+                              <span class="text-sm badge badge-danger">-</span>
+                            @endif
+                          </td>
                         </tr>
                         <tr>
                           <th>Bukti Keluhan</th>
@@ -202,6 +211,17 @@
         confirmButtonColor: '#28B7B5',
         confirmButtonText: 'OK',
     });
+    </script>
+@endif
+@if (session()->has('error'))
+    <script>
+      Swal.fire({
+        title: 'Error!',
+        text: "{Session:get('error')}",
+        icon: 'error',
+        confirmButtonColor: '#dc3545',
+        confirmButtonText: 'OK',
+      })
     </script>
 @endif
 @endpush

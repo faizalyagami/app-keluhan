@@ -44,7 +44,6 @@ Route::middleware(['isMahasiswa'])->group(function () {
     // Logout mahasiswa
     Route::get('/logout', [\App\Http\Controllers\User\UserController::class, 'logout'])->name('user.logout');
 
-
     Route::get('/laporan/{who?}', [\App\Http\Controllers\User\UserController::class, 'laporan'])->name('keluhan.laporan');
     Route::get('/keluhan-detail/{id_keluhan}', [\App\Http\Controllers\User\UserController::class, 'detailkeluhan'])->name('keluhan.detail');
 });
@@ -83,6 +82,13 @@ Route::prefix('admin')->group(function () {
 });
 
 Route::post('/disposisi', [KeluhanController::class, 'storeDisposisi'])->name('disposisi');
+
+
+
+// Route::middleware(['auth:petugas'])->group(function () {
+//     Route::get('/keluhan/{status}', [KeluhanController::class, 'index'])->name('keluhan.index');
+//     Route::get('/keluhan/detail/{id_keluhan}', [KeluhanController::class, 'show'])->name('keluhan.show');
+// });
 
 // Route::get('/admin', function () {
 //     return view('pages.admin.dashboard');

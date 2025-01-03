@@ -24,12 +24,17 @@
                   <i class="fas fa-bullhorn text-orange"></i> Keluhan
                   <i class="text-right fas fa-chevron-down"></i>
                 </a>
+
                 <ul class="nav-item-child">
-                  <li class="nav-item">
-                    <a class="nav-link {{ (request()->segment(2) == 'keluhan/0') ? 'active' : '' }}" href="{{ route('keluhan.index', '0')}}">
-                        <i class="fas fa-clipboard-check text-info"></i> Verifikasi & Validasi
-                    </a>
-                  </li>
+                  
+                  @if (Auth::guard('admin')->user()->roles == 'admin')
+                    <li class="nav-item">
+                      <a class="nav-link {{ (request()->segment(2) == 'keluhan/0') ? 'active' : '' }}" href="{{ route('keluhan.index', '0')}}">
+                          <i class="fas fa-clipboard-check text-info"></i> Verifikasi & Validasi
+                      </a>
+                    </li> 
+                  @endif
+                  
                   <li class="nav-item">
                     <a class="nav-link" href="{{ route('keluhan.index', 'proses')}}">
                         <i class="fas fa-sync text-yellow"></i> Sedang Diproses
@@ -42,26 +47,28 @@
                   </li>
                 </ul>
               </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('laporan.index')}}">
-                  <i class="fas fa-file-alt text-green"></i>
-                  <span class="nav-link-text">Laporan</span>
-                </a>
-              </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ route('mahasiswa.index')}}">
-                <i class="fas fa-users text-default"></i>
-                <span class="nav-link-text">Mahasiswa</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ route('petugas.index')}} ">
-                <i class="fas fa-users-cog text-info"></i>
-                <span class="nav-link-text">Petugas</span>
-              </a>
-            </li>
-          </ul>
 
+            @if (Auth::guard('admin')->user()->roles === 'admin')
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ route('laporan.index')}}">
+                    <i class="fas fa-file-alt text-green"></i>
+                    <span class="nav-link-text">Laporan</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ route('mahasiswa.index')}}">
+                    <i class="fas fa-users text-default"></i>
+                    <span class="nav-link-text">Mahasiswa</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ route('petugas.index')}} ">
+                    <i class="fas fa-users-cog text-info"></i>
+                    <span class="nav-link-text">Petugas</span>
+                  </a>
+                </li>
+            @endif
+          </ul>
         </div>
       </div>
     </div>

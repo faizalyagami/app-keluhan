@@ -46,6 +46,7 @@ class Keluhan extends Model
 
     public function disposisi()
     {
-        return $this->hasMany(Disposisi::class, 'id_struktural', 'id_struktural');
+        return $this->hasMany(Disposisi::class, 'id_struktural', 'id_struktural')
+            ->whereNotNull('id_keluhan');
     }
 }

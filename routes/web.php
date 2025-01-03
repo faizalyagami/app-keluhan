@@ -70,7 +70,8 @@ Route::prefix('admin')->group(function () {
         Route::delete('keluhan/delete/{id_keluhan}', [\App\Http\Controllers\Admin\KeluhanController::class, 'destroy'])->name('keluhan.delete');
 
         // Tanggapan
-        Route::post('tanggapan', [TanggapanEmailController::class, 'response'])->name('tanggapan');
+        Route::post('tanggapanEmail', [TanggapanEmailController::class, 'response'])->name('tanggapanEmail');
+        Route::post('tanggapan', [TanggapanController::class, 'response'])->name('tanggapan');
         //Route::post('tanggapan', [TanggapanController::class, 'response'])->name('tanggapan');
     });
 

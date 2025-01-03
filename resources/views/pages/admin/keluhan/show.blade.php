@@ -83,7 +83,7 @@
                           <th>Status Disposisi</th>
                           <td>:</td>
                           <td>
-                            @if ($keluhan->status == 'proses' && $keluhan->disposisi->count()>0)
+                            @if ($keluhan->status == 'proses' && $keluhan->disposisi->where('id_keluhan', $keluhan->id_keluhan)->count() > 0)
                               <span class="text-sm badge badge-info">Disposisi</span>
                             @else
                               <span class="text-sm badge badge-danger">-</span>
@@ -91,10 +91,41 @@
                           </td>
                         </tr>
                         <tr>
+                          <th>Pesan Disposisi</th>
+                          <td>:</td>
+                          <td>
+                            @if ($keluhan->status == 'proses' && $keluhan->disposisi->where('id_keluhan', $keluhan->id_keluhan)->count() > 0)
+                              {{ $keluhan->disposisi->firstWhere('id_keluhan', $keluhan->id_keluhan)?->pesan ?? '-' }}
+                            @endif
+                          </td>
+                        </tr>
+                        <tr>
                           <th>Bukti Keluhan</th>
                           <td>:</td>
-                          <td><img src="{{ Storage::url($keluhan->foto) }} " class="card-img"></td>
+                          <td>
+                            <a href="" data-toggle="modal" data-target="#buktiKeluhanModal">
+                              <i class="bi bi-eye-fill fs-5"></i>
+                            </a>
+                          </td>
+                          {{-- <td><img src="{{ Storage::url($keluhan->foto) }} " class="card-img"></td> --}}
                         </tr>
+
+                        <div class="modal fade" id="buktiKeluhanModal" tabindex="-1" aria-labelledby="buktiKeluhanLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="buktiKeluhanLabel">Bukti Keluhan</h5>
+                                      <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body text-center">
+                                      <img src="{{ Storage::url($keluhan->foto) }}" alt="Bukti Keluhan" class="img-fluid">
+                                  </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
                         {{-- <tr>
                             <th>Hapus keluhan</th>
                             <td>:</td>
@@ -115,7 +146,7 @@
                 </div>
               </div>
               <div class="card-body">
-                <form action="{{ route('tanggapan')}} " method="POST">
+                <form action="{{ route('tanggapanEmail')}} " method="POST">
                     @csrf
                     <input type="hidden" name="id_keluhan" value="{{ $keluhan->id_keluhan }}">
                   <!-- Tanggapan -->
@@ -150,47 +181,50 @@
             </div>
           </div>
 
-          <div class="col-xl-6 order-xl-2">
-            <div class="card">
-              <div class="card-header">
-                <div class="row align-items-center">
-                  <div class="col-8">
-                    <h3 class="mb-0">Disposisi</h3>
+          @if (Auth::guard('admin')->user()->id_struktural == 1)
+            <div class="col-xl-6 order-xl-2">
+              <div class="card">
+                <div class="card-header">
+                  <div class="row align-items-center">
+                    <div class="col-8">
+                      <h3 class="mb-0">Disposisi</h3>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="card-body">
-                <form action="{{ route('disposisi') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="id_keluhan" value="{{ $keluhan->id_keluhan }}">
-                  <!-- Tanggapan -->
-                  <div class="">
-                    <div class="form-group">
-                        <label for="status">Disposisi kepada</label>
-                        <select name="id_struktural" id="struktural" class="form-control @error('id_struktural') is-invalid @enderror" required>
-                          <option value="">--Pilih tujuan--</option>
-                          @foreach ($struktural as $item)
-                              <option value="{{ $item->id_struktural }}" {{ old('id_struktural') == $item->id_struktural ? 'selected' : '' }}>{{ $item->nama_struktural }}</option>
-                          @endforeach
-                        </select>
-                          @error('id_struktural')
-                              <span class="invalid-feedback">{{ $message }}</span>
+                <div class="card-body">
+                  <form action="{{ route('disposisi') }}" method="POST">
+                      @csrf
+                      <input type="hidden" name="id_keluhan" value="{{ $keluhan->id_keluhan }}">
+                    <!-- Tanggapan -->
+                    <div class="">
+                      <div class="form-group">
+                          <label for="status">Disposisi kepada</label>
+                          <select name="id_struktural" id="struktural" class="form-control @error('id_struktural') is-invalid @enderror" required>
+                            <option value="">--Pilih tujuan--</option>
+                            @foreach ($struktural as $item)
+                                <option value="{{ $item->id_struktural }}" {{ old('id_struktural') == $item->id_struktural ? 'selected' : '' }}>{{ $item->nama_struktural }}</option>
+                            @endforeach
+                          </select>
+                            @error('id_struktural')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                      </div>
+                      <div class="form-group">
+                        <label class="form-control-label">Pesan</label>
+                        <textarea rows="2" class="form-control" name="pesan" id="pesan" placeholder="Ketik pesan">{{ old('pesan') }}</textarea>
+                      </div>
+                          @error('pesan')
+                            <span class="invalid-feedback">{{ $message }}</span>
                           @enderror
                     </div>
-                    <div class="form-group">
-                      <label class="form-control-label">Pesan</label>
-                      <textarea rows="2" class="form-control" name="pesan" id="pesan" placeholder="Ketik pesan">{{ old('pesan') }}</textarea>
-                    </div>
-                        @error('pesan')
-                          <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                  </div>
 
-                  <button type="submit" class="btn btn-primary">Kirim</button>
-                </form>
+                    <button type="submit" class="btn btn-primary">Kirim</button>
+                  </form>
+                </div>
               </div>
-            </div>
-          </div>
+            </div>  
+          @endif
+          
         </div>
       </div>
 @endsection

@@ -17,10 +17,14 @@ class KeluhanController extends Controller
     public function index($status)
     {
 
-        $loggedPetugas = Auth::guard('petugas')->user();
+        $loggedPetugas = Auth::guard('admin')->user();
+        // dd($loggedPetugas);
 
         $keluhan = Keluhan::with(['kategori'])
             ->where('status', $status)
+            ->when($loggedPetugas->roles == 'petugas', function ($q) use ($loggedPetugas) {
+                $q->where('id_struktural', $loggedPetugas->id_struktural);
+            })
             ->orderBy('tgl_keluhan', 'desc')
             ->get();
 
@@ -54,8 +58,13 @@ class KeluhanController extends Controller
         ]);
 
         $keluhan = Keluhan::findOrFail($request->id_keluhan);
-        if ($keluhan->id_struktural != 1) {
-            return redirect()->back()->with('error', 'Disposisi  hanya dapat dilakukan oleh Dekan.');
+
+        if (!$keluhan) {
+            return redirect()->back()->with('error', 'Keluhan tidak ditemukan.');
+        }
+
+        if (Auth::guard('admin')->user()->id_struktural != 1) {
+            return redirect()->back()->with('error', 'Hanya Dekan yang dapat melakukan disposisi.');
         }
 
         $keluhan->id_struktural = $request->id_struktural;

@@ -21,7 +21,6 @@ class PetugasSeeder extends Seeder
                 'telp' => '08122021514',
                 'password'  => bcrypt('D940198'),
                 'roles' => 'petugas',
-                'id_struktural' => 1
             ],
             [
                 'nama_petugas'  => 'Ali Mubarak, S.Psi., M.Psi.',
@@ -29,7 +28,6 @@ class PetugasSeeder extends Seeder
                 'telp' => '081221820024',
                 'password'  => bcrypt('D070465'),
                 'roles' => 'petugas',
-                'id_struktural' => 2
             ],
             [
                 'nama_petugas'  => 'Dr. Lilim Halimah, BHSc., MHSPY.',
@@ -37,7 +35,6 @@ class PetugasSeeder extends Seeder
                 'telp' => '087821295500',
                 'password'  => bcrypt('D040388'),
                 'roles' => 'petugas',
-                'id_struktural' => 3
             ],
             [
                 'nama_petugas'  => 'Suhana, S.Psi., M.Psi.',
@@ -45,7 +42,6 @@ class PetugasSeeder extends Seeder
                 'telp' => '081910066125',
                 'password'  => bcrypt('D000329'),
                 'roles' => 'petugas',
-                'id_struktural' => 4
             ],
             [
                 'nama_petugas'  => 'Dr. Siti Qodariah, M.Psi.',
@@ -53,7 +49,6 @@ class PetugasSeeder extends Seeder
                 'telp' => '0818228119',
                 'password'  => bcrypt('D900112'),
                 'roles' => 'petugas',
-                'id_struktural' => 5
             ],
             [
                 'nama_petugas'  => 'Farida Coralia, S.Psi., M.Psi.',
@@ -61,7 +56,6 @@ class PetugasSeeder extends Seeder
                 'telp' => '087824050920',
                 'password'  => bcrypt('D080470'),
                 'roles' => 'petugas',
-                'id_struktural' => 6
             ],
             [
                 'nama_petugas'  => 'Dr. Eneng Nurlaili Wangi, M.Psi.',
@@ -69,7 +63,6 @@ class PetugasSeeder extends Seeder
                 'telp' => '087822180071',
                 'password'  => bcrypt('D970266'),
                 'roles' => 'petugas',
-                'id_struktural' => 7
             ],
             [
                 'nama_petugas'  => 'Dr. Endah Nawangsih, Dra., M.Psi.',
@@ -77,7 +70,6 @@ class PetugasSeeder extends Seeder
                 'telp' => '087821971110',
                 'password'  => bcrypt('D970265'),
                 'roles' => 'petugas',
-                'id_struktural' => 8
             ],
             [
                 'nama_petugas'  => 'Rizka Hadian Permana, S.Psi., M.Psi.',
@@ -85,7 +77,6 @@ class PetugasSeeder extends Seeder
                 'telp' => '085294862549',
                 'password'  => bcrypt('D150673'),
                 'roles' => 'petugas',
-                'id_struktural' => 9
             ],
             [
                 'nama_petugas'  => 'Nida Hamidah, S.Psi',
@@ -93,7 +84,6 @@ class PetugasSeeder extends Seeder
                 'telp' => '081320200982',
                 'password'  => bcrypt('A150337'),
                 'roles' => 'petugas',
-                'id_struktural' => 10
             ],
             [
                 'nama_petugas'  => 'Nurmariam',
@@ -101,7 +91,6 @@ class PetugasSeeder extends Seeder
                 'telp' => '082216418470',
                 'password'  => bcrypt('A910111'),
                 'roles' => 'petugas',
-                'id_struktural' => 11
             ],
             [
                 'nama_petugas'  => 'Undang Kamaludin',
@@ -109,10 +98,16 @@ class PetugasSeeder extends Seeder
                 'telp' => '081322370437',
                 'password'  => bcrypt('A020217'),
                 'roles' => 'petugas',
-                'id_struktural' => 12
             ]
         ];
 
+        // Insert petugas data
         Petugas::insert($petugasData);
+
+        $aliMubarak = Petugas::where('username', 'D070465')->first();
+        $aliMubarak->struktural()->attach([2, 3]);
+
+        $nidaHamidah = Petugas::where('username', 'A150337')->first();
+        $nidaHamidah->struktural()->attach([2, 3]);
     }
 }

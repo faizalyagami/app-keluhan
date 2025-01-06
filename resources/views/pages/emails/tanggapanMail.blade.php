@@ -7,7 +7,8 @@
     <title>Tanggapan Keluhan</title>
 </head>
 <body>
-    <h3>Assalamualaikum, {{ $keluhan->user->name }} NPM : {{ $keluhan->user->npm }}</h3>
+    <h3>Assalamualaikum, {{ $keluhan->user->name }}</h3>
+    <h3>NPM : {{ $keluhan->user->npm }}</h3>
     <p>Berikut adalah tanggapan terkait keluhan Anda: </p>
     <p><strong>Yang memberi tanggapan: </strong>{{ $keluhan->struktural->nama_struktural }}</p>
     <p><strong>Kategori Keluhan: </strong>{{ $keluhan->kategori->nama_kategori_keluhan }}</p>

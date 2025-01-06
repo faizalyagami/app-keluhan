@@ -18,8 +18,7 @@ class Petugas extends Authenticatable
         'username',
         'password',
         'telp',
-        'roles',
-        'id_struktural'
+        'roles'
     ];
 
     protected $hidden = [
@@ -28,7 +27,7 @@ class Petugas extends Authenticatable
 
     public function struktural()
     {
-        return $this->belongsTo(Struktural::class, 'id_struktural', 'id_struktural');
+        return $this->belongsToMany(Struktural::class, 'petugas_struktural', 'id_petugas', 'id_struktural');
     }
 
     public function isStruktural()

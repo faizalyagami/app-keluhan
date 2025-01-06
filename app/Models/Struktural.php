@@ -15,7 +15,7 @@ class Struktural extends Model
 
     public function petugas()
     {
-        return $this->hasMany(Petugas::class, 'id_struktural', 'id_struktural');
+        return $this->belongsToMany(Petugas::class, 'petugas_struktural', 'id_struktural', 'id_petugas');
     }
 
     public function keluhan()

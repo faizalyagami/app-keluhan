@@ -30,4 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'wablas' => [
+        'api_url' => 'https://bdg.wablas.com/api/send-message',
+        'api_key' => env('WABLAS_API_KEY')
+    ]
+
 ];

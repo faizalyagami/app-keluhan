@@ -16,17 +16,11 @@ class StrukturalSeeder extends Seeder
     {
         $data = [
             ['nama_struktural' => 'Dekan Fakultas'],
-            ['nama_struktural' => 'Wakil Dekan I'],
-            ['nama_struktural' => 'Wakil Dekan II'],
-            ['nama_struktural' => 'Wakil Dekan III'],
-            ['nama_struktural' => 'Ketua Prodi S1'],
-            ['nama_struktural' => 'Sekretaris Prodi S1'],
-            ['nama_struktural' => 'Ketua Prodi Profesi'],
-            ['nama_struktural' => 'Sekretaris Prodi Profesi'],
-            ['nama_struktural' => 'Laboratorium Psikologi'],
-            ['nama_struktural' => 'Kasie Akademik Fakultas'],
-            ['nama_struktural' => 'Kasie Administrasi Umum dan Keuangan'],
-            ['nama_struktural' => 'Kasie Kemahasiswaan'],
+            ['nama_struktural' => 'Bidang Akademik S1'],
+            ['nama_struktural' => 'Bidang Akademik Profesi'],
+            ['nama_struktural' => 'Bidang Administrasi Umum dan Keuangan'],
+            ['nama_struktural' => 'Bidang Kemahasiswaan'],
+            ['nama_struktural' => 'Laboratorium Psikologi']
         ];
 
         DB::table('struktural')->insert($data);

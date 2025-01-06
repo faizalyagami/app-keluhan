@@ -153,7 +153,7 @@ class UserController extends Controller
         $data = $request->all();
 
         $validate = Validator::make($data, [
-            'npm' => ['required', 'min:16', 'max:16', 'unique:mahasiswa'],
+            'npm' => ['required', 'min:11', 'max:11', 'unique:mahasiswa'],
             'name' => ['required', 'string'],
             'email' => ['required', 'email', 'string', 'unique:mahasiswa'],
             'username' => ['required', 'string', 'regex:/^\S*$/u', 'unique:mahasiswa', 'unique:petugas,username'],
@@ -244,7 +244,7 @@ class UserController extends Controller
             'id_struktural' => $data['id_struktural'],
             //'tgl_keluhan' => $data['tgl_keluhan'],
             // 'id_kategori' => $data['id_kategori'],
-            'foto' => $data['foto'] ?? 'assets/keluhan/tambakmekar.png',
+            'foto' => $data['foto'],
             'status' => '0',
         ]);
 
@@ -422,7 +422,7 @@ class UserController extends Controller
         $data = $request->all();
 
         $validate = Validator::make($data, [
-            'npm' => ['sometimes', 'required', 'min:16', 'max:16', Rule::unique('mahasiswa')->ignore($npm, 'npm')],
+            'npm' => ['sometimes', 'required', 'min:11', 'max:11', Rule::unique('mahasiswa')->ignore($npm, 'npm')],
             'nama' => ['required', 'string'],
             'email' => ['sometimes', 'required', 'email', 'string', Rule::unique('mahasiswa')->ignore($npm, 'npm')],
             'username' => ['sometimes', 'required', 'string', 'regex:/^\S*$/u', Rule::unique('mahasiswa')->ignore($npm, 'npm'), 'unique:petugas,username'],

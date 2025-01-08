@@ -10,6 +10,7 @@ use App\Models\Struktural;
 use App\Models\Tanggapan;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\StrukturalHelper;
+use App\Models\Evaluasi;
 
 class KeluhanController extends Controller
 {
@@ -20,7 +21,7 @@ class KeluhanController extends Controller
         $loggedPetugas = Auth::guard('admin')->user();
         // dd($loggedPetugas);
 
-        $keluhan = Keluhan::with(['kategori'])
+        $keluhan = Keluhan::with(['kategori', 'evaluasi'])
             ->where('status', $status)
             ->when($loggedPetugas->roles == 'petugas', function ($q) use ($loggedPetugas) {
                 if (in_array($loggedPetugas->nama_petugas, [
@@ -75,6 +76,9 @@ class KeluhanController extends Controller
             ->orderBy('tgl_keluhan', 'desc')
             ->get();
 
+        foreach ($keluhan as $k) {
+            $k->first_evaluasi = $k->evaluasi->isEmpty() ? null : $k->evaluasi->first();
+        }
 
         return view('pages.admin.keluhan.index', compact('keluhan', 'status'));
     }
@@ -142,5 +146,20 @@ class KeluhanController extends Controller
         }
 
         return redirect()->route('keluhan.index');
+    }
+
+    public function storeEvaluasi(Request $request)
+    {
+        $request->validate([
+            'id_keluhan' => 'required|exists:keluhan,id_keluhan',
+            'isi_evaluasi' => 'required|string'
+        ]);
+
+        Evaluasi::updateOrCreate(
+            ['id_keluhan' => $request->id_keluhan],
+            ['isi_evaluasi' => $request->isi_evaluasi]
+        );
+
+        return redirect()->back()->with('success', 'Evaluasi Berhasil disimpan!');
     }
 }

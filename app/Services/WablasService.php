@@ -4,41 +4,28 @@ namespace App\Service;
 
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class WablasService
 {
-    protected $client;
     protected $apiUrl;
     protected $apiKey;
 
-    public function __construct(Client $client)
+    public function __construct()
     {
-        $this->client = $client;
-        $this->apiUrl = config('wablas.api_url');
-        $this->apiKey = config('wablas.api_key');
+        $this->apiUrl = env('WABLAS_API_URL');
+        $this->apiKey = env('WABLAS_API_KEY');
     }
 
     public function sendMessage($to, $message)
     {
-        try {
-            $response = $this->client->post($this->apiUrl, [
-                'form_params' => [
-                    'apiKey' => $this->apiKey,
-                    'number' => $to,
-                    'message' => $message,
-                ]
-            ]);
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $this->apiKey,
+        ])->post($this->apiUrl, [
+            'phone' => $to,
+            'message' => $message,
+        ]);
 
-            $data = json_decode($response->getBody()->getContents(), true);
-
-            if ($data['status'] == 'success') {
-                return true;
-            }
-
-            return false;
-        } catch (\Exception $e) {
-            Log::error("Error Sending Wablas: " . $e->getMessage());
-            return false;
-        }
+        return $response->json();
     }
 }

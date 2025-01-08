@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\KeluhanController;
 use App\Http\Controllers\Admin\TanggapanController;
+use App\Http\Controllers\SendWhatsAppController;
 use App\Http\Controllers\TanggapanEmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -73,6 +74,9 @@ Route::prefix('admin')->group(function () {
         Route::post('tanggapanEmail', [TanggapanEmailController::class, 'response'])->name('tanggapanEmail');
         Route::post('tanggapan', [TanggapanController::class, 'response'])->name('tanggapan');
         //Route::post('tanggapan', [TanggapanController::class, 'response'])->name('tanggapan');
+
+        //evaluasi
+        Route::post('evaluasi', [KeluhanController::class, 'storeEvaluasi'])->name('evaluasi');
     });
 
 
@@ -81,10 +85,12 @@ Route::prefix('admin')->group(function () {
         Route::post('/login', [\App\Http\Controllers\Admin\AdminController::class, 'login'])->name('admin.login');
     });
 });
+// Route::post('/admin/keluhan/{id_keluhan}/evaluasi', [KeluhanController::class, 'storeEvaluasi'])->name('keluhan.evaluasi');
+
 
 Route::post('/disposisi', [KeluhanController::class, 'storeDisposisi'])->name('disposisi');
 
-
+Route::post('/send-message', [SendWhatsAppController::class, 'sendMessage']);
 
 // Route::middleware(['auth:petugas'])->group(function () {
 //     Route::get('/keluhan/{status}', [KeluhanController::class, 'index'])->name('keluhan.index');

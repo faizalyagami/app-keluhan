@@ -12,7 +12,7 @@
           <div class="header-body">
             <div class="row align-items-center py-4">
               <div class="col-lg-6 col-7">
-                <h6 class="h2 text-white d-inline-block mb-0">Tanggapan</h6>
+                <h6 class="h2 text-white d-inline-block mb-0">Tindak Lanjut</h6>
                 <nav aria-label="breadcrumb" class="d-none d-md-inline-block ml-md-4">
                   {{-- <ol class="breadcrumb breadcrumb-links breadcrumb-dark">
                     <li class="breadcrumb-item"><a href="#"><i class="fas fa-home"></i></a></li>
@@ -136,12 +136,14 @@
               </div>
             </div>
           </div>
+
+          @if ($keluhan->status != 'selesai')
           <div class="col-xl-6 order-xl-2">
             <div class="card">
               <div class="card-header">
                 <div class="row align-items-center">
                   <div class="col-8">
-                    <h3 class="mb-0">Tanggapan</h3>
+                    <h3 class="mb-0">Tindak Lanjut</h3>
                   </div>
                 </div>
               </div>
@@ -170,7 +172,7 @@
                         </select>
                       </div>
                     <div class="form-group">
-                      <label class="form-control-label">Tanggapan</label>
+                      <label class="form-control-label">Tindak Lanjut</label>
                       <textarea rows="4" class="form-control" name="tanggapan" id="tanggapan" placeholder="Ketik tanggapan">{{ $tanggapan->tanggapan ?? '' }}</textarea>
                     </div>
                   </div>
@@ -180,8 +182,39 @@
               </div>
             </div>
           </div>
+          @endif
 
-          @if (Auth::guard('admin')->user()->id_struktural == 1)
+          @if ($keluhan->status == 'selesai')
+          <div class="col-xl-6 order-xl-2">
+            <div class="card">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col-8">
+                    <h3 class="mb-0">Evaluasi</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <form action="{{ route('evaluasi')}} " method="POST">
+                    @csrf
+                    <input type="hidden" name="id_keluhan" value="{{ $keluhan->id_keluhan }}">
+                  <!-- Tanggapan -->
+                  <div class="">
+                    <div class="form-group">
+                      <label class="form-control-label">Evaluasi</label>
+                      <textarea rows="4" class="form-control" name="isi_evaluasi" id="evaluasi" placeholder="masukan evaluasi">
+                        {{-- {{$keluhan->evaluasi->first()->isi_evaluasi ?? '' }} --}}
+                      </textarea>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Kirim</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          @endif
+
+          @if ($keluhan->status != 'selesai' && Auth::guard('admin')->user()->id_petugas == 2 || Auth::guard('admin')->user()->id_petugas == 1)
             <div class="col-xl-6 order-xl-2">
               <div class="card">
                 <div class="card-header">
@@ -258,4 +291,20 @@
       })
     </script>
 @endif
+<script>
+  $(document).on('click', '.btn-warning', function () {
+    var id_keluhan = $(this).data('id_keluhan');
+    $.ajax({
+      url: '/admin/keluhan/evaluasi',
+      type: 'GET',
+      data: { id_keluhan: id_keluhan },
+      success: function (response) {
+        $('#evaluasiModal .modal-body').html('<p>' + response.isi_evaluasi + '</p>');
+      },
+      error: function () {
+        $('#evaluasiModal .modal-body').html('<p>Error retrieving evaluation data.</p>');
+      }
+  });
+});
+</script>
 @endpush

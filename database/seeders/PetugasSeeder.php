@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Petugas;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PetugasSeeder extends Seeder
 {

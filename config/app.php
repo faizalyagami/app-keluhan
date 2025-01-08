@@ -1,5 +1,8 @@
 <?php
 
+use App\Providers\WablasServiceProvider;
+use App\Service\WablasService;
+
 return [
 
     /*
@@ -234,5 +237,9 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
+
+    // 'providers' => [
+    //     WablasServiceProvider::class
+    // ]
 
 ];

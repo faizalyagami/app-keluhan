@@ -12,9 +12,7 @@ class Keluhan extends Model
     use HasFactory;
 
     protected $table = 'keluhan';
-
     protected $primaryKey = 'id_keluhan';
-
     protected $attribbutes = [
         'status' => '0'
     ];
@@ -48,5 +46,10 @@ class Keluhan extends Model
     {
         return $this->hasMany(Disposisi::class, 'id_struktural', 'id_struktural')
             ->whereNotNull('id_keluhan');
+    }
+
+    public function evaluasi()
+    {
+        return $this->hasMany(Evaluasi::class, 'id_keluhan', 'id_keluhan');
     }
 }

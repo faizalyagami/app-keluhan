@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Mail\VerifikasiEmailUntukRegistrasiKeluhanMahasiswa;
-use App\Models\KategoriKeluhan;
 use App\Models\Keluhan;
-use App\Models\Mahasiswa;
 use App\Models\Petugas;
 use App\Models\Province;
+use App\Models\Mahasiswa;
 use App\Models\Struktural;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Models\KategoriKeluhan;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Carbon;
+use App\Mail\VerifikasiEmailUntukRegistrasiKeluhanMahasiswa;
 
 class UserController extends Controller
 {
@@ -248,12 +249,69 @@ class UserController extends Controller
             'status' => '0',
         ]);
 
+        $struktural = Struktural::find($data['id_struktural']);
+        if ($struktural) {
+            $petugas = Petugas::where('id_struktural', $struktural->id_struktural)->get();
+            $phoneNumb = [];
+
+            foreach ($petugas as $petugasItem) {
+                array_push($phoneNumb, [
+                    'phone' => $petugasItem->telp,
+                    'message' => 'Assalamualaikum. Ada keluhan baru dari mahasiswa dengan NPM: ' . Auth::guard('mahasiswa')->user()->npm . "\n" .
+                        'Nama: ' . Auth::guard('mahasiswa')->user()->name . "\n" .
+                        'Kategori keluhan: ' . $keluhan->kategori->nama_kategori_keluhan . "\n" .
+                        'Isi keluhan: ' . $keluhan->isi_keluhan . "\n" .
+                        'Cek detail di dashboard.'
+                ]);
+            }
+            // dd($phoneNumb, $petugas, $struktural);
+            if (count($phoneNumb) > 0) {
+                $p = $this->sendWhatsAppNotification($phoneNumb);
+                // dd($p, $phoneNumb);
+            }
+        }
+
         if ($keluhan) {
 
             return redirect()->back()->with(['keluhan' => 'Berhasil terkirim!', 'type' => 'success']);
         } else {
 
             return redirect()->back()->with(['keluhan' => 'Gagal terkirim!', 'type' => 'error']);
+        }
+    }
+
+    public function sendWhatsAppNotification($phoneNumb)
+    {
+        $curl = curl_init();
+        $token = 'p0hcS27acm9OpjUzoiYYxA3YLrTnqwisnMTZK8NZRy0SchNOr6eybYGExNSKXWTU';
+        $url = 'https://bdg.wablas.com/api/v2/send-message';
+        $random = true;
+
+        $payload = [
+            "data" => $phoneNumb
+        ];
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER, [
+            "Authorization: $token",
+            "Content-Type: application/json"
+        ]);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        $response = json_decode($result, true);
+        // return [$token, $response, $payload1, $payload];
+
+        if (isset($response['status']) && $response['status'] == 'success') {
+            Log::info('Notifikasi berhasil dikirim ke petugas');
+        } else {
+            Log::error("Gagal mengirim notifikasi Whastapp!: " . $result);
         }
     }
 

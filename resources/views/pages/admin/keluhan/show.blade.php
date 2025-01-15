@@ -103,29 +103,41 @@
                           <th>Bukti Keluhan</th>
                           <td>:</td>
                           <td>
-                            <a href="" data-toggle="modal" data-target="#buktiKeluhanModal">
-                              <i class="bi bi-eye-fill fs-5"></i>
-                            </a>
+                              @if ($keluhan->photos->isEmpty())
+                                  <span class="text-sm badge badge-danger">- Tidak ada bukti keluhan -</span>
+                              @else
+                                  <a href="#" data-toggle="modal" data-target="#buktiKeluhanModal">
+                                      <i class="bi bi-eye-fill" style="font-size:24px"></i>
+                                  </a>
+                              @endif
                           </td>
-                          {{-- <td><img src="{{ Storage::url($keluhan->foto) }} " class="card-img"></td> --}}
-                        </tr>
+                      </tr>
 
-                        <div class="modal fade" id="buktiKeluhanModal" tabindex="-1" aria-labelledby="buktiKeluhanLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered">
-                              <div class="modal-content">
-                                  <div class="modal-header">
-                                      <h5 class="modal-title" id="buktiKeluhanLabel">Bukti Keluhan</h5>
-                                      <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                                  </div>
-                                  <div class="modal-body text-center">
-                                      <img src="{{ Storage::url($keluhan->foto) }}" alt="Bukti Keluhan" class="img-fluid">
-                                  </div>
-                                  <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
+                      <div class="modal fade" id="buktiKeluhanModal" tabindex="-1" aria-labelledby="buktiKeluhanLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="buktiKeluhanLabel">Bukti Keluhan</h5>
+                                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        @foreach($keluhan->photos as $foto)
+                                            <div class="col-4">
+                                                <!-- Link gambar untuk Lightbox -->
+                                                <a href="{{ Storage::url($foto->path) }}" data-toggle="lightbox" data-gallery="gallery">
+                                                    <img src="{{ Storage::url($foto->path) }}" alt="Bukti Keluhan" class="img-fluid mb-3">
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                         {{-- <tr>
                             <th>Hapus keluhan</th>
                             <td>:</td>
@@ -157,17 +169,17 @@
                         <label for="status">Status</label>
                         <select name="status" class="form-control" id="status">
                             @if ($keluhan->status == '0')
-                                <option selected value="0">Pending</option>
-                                <option value="proses">Proses</option>
-                                <option value="selesai">Selesai</option>
+                                <option selected value="0">Belum Terselesaikan</option> {{--  pending --}}
+                                <option value="proses">Diperlukan Tindak Lanjut Lain</option> {{--  proses --}}
+                                <option value="selesai">Terselesaikan</option> {{--  selesai --}}
                             @elseif($keluhan->status == 'proses')
-                                <option value="0">Pending</option>
-                                <option selected value="proses">Proses</option>
-                                <option value="selesai">Selesai</option>
+                                <option value="0">Belum Terselesaikan</option>
+                                <option selected value="proses">Diperlukan Tindak Lanjut Lain</option>
+                                <option value="selesai">Terselesaikan</option>
                             @else
-                                <option value="0">Pending</option>
-                                <option value="proses">Proses</option>
-                                <option selected value="selesai">Selesai</option>
+                                <option value="0">Belum Terselesaikan</option>
+                                <option value="proses">Diperlukan Tindak Lanjut Lain</option>
+                                <option selected value="selesai">Terselesaikan</option>
                             @endif
                         </select>
                       </div>
@@ -184,7 +196,7 @@
           </div>
           @endif
 
-          @if ($keluhan->status == 'selesai')
+          @if ($keluhan->status == 'selesai' && Auth::user()->roles === 'admin')
           <div class="col-xl-6 order-xl-2">
             <div class="card">
               <div class="card-header">
@@ -198,13 +210,11 @@
                 <form action="{{ route('evaluasi')}} " method="POST">
                     @csrf
                     <input type="hidden" name="id_keluhan" value="{{ $keluhan->id_keluhan }}">
-                  <!-- Tanggapan -->
+                  <!-- Evaluasi -->
                   <div class="">
                     <div class="form-group">
                       <label class="form-control-label">Evaluasi</label>
-                      <textarea rows="4" class="form-control" name="isi_evaluasi" id="evaluasi" placeholder="masukan evaluasi">
-                        {{-- {{$keluhan->evaluasi->first()->isi_evaluasi ?? '' }} --}}
-                      </textarea>
+                      <textarea rows="4" class="form-control" name="isi_evaluasi" id="evaluasi" placeholder="masukan evaluasi"></textarea>
                     </div>
                   </div>
                   <button type="submit" class="btn btn-primary">Kirim</button>
@@ -267,8 +277,41 @@
 <script>
     $(document).ready(function() {
         $('#keluhanTable').DataTable();
-    } );
+    });
+
+    // Handle form submission for evaluation
+    $('#evaluasiForm').on('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Ajax form submission
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                Swal.fire({
+                    title: 'Pemberitahuan!',
+                    text: "Evaluasi berhasil dikirim.",
+                    icon: 'success',
+                    confirmButtonColor: '#28B7B5',
+                    confirmButtonText: 'OK',
+                }).then(function() {
+                    location.reload();  // Reload the page after the popup
+                });
+            },
+            error: function() {
+                Swal.fire({
+                    title: 'Error!',
+                    text: "Terjadi kesalahan saat mengirim evaluasi.",
+                    icon: 'error',
+                    confirmButtonColor: '#dc3545',
+                    confirmButtonText: 'OK',
+                });
+            }
+        });
+    });
 </script>
+
 @if (session()->has('status'))
 <script>
     Swal.fire({
@@ -278,33 +321,28 @@
         confirmButtonColor: '#28B7B5',
         confirmButtonText: 'OK',
     });
-    </script>
+</script>
 @endif
+
 @if (session()->has('error'))
-    <script>
-      Swal.fire({
+<script>
+    Swal.fire({
         title: 'Error!',
-        text: "{Session:get('error')}",
+        text: "{{ Session::get('error') }}",
         icon: 'error',
         confirmButtonColor: '#dc3545',
         confirmButtonText: 'OK',
-      })
-    </script>
-@endif
-<script>
-  $(document).on('click', '.btn-warning', function () {
-    var id_keluhan = $(this).data('id_keluhan');
-    $.ajax({
-      url: '/admin/keluhan/evaluasi',
-      type: 'GET',
-      data: { id_keluhan: id_keluhan },
-      success: function (response) {
-        $('#evaluasiModal .modal-body').html('<p>' + response.isi_evaluasi + '</p>');
-      },
-      error: function () {
-        $('#evaluasiModal .modal-body').html('<p>Error retrieving evaluation data.</p>');
-      }
-  });
-});
+    });
 </script>
+
+<script>
+  $(document).ready(function () {
+      // Inisialisasi Lightbox untuk gambar yang di-klik
+      $(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+          event.preventDefault();
+          $(this).ekkoLightbox();
+      });
+  });
+</script>
+@endif
 @endpush

@@ -68,7 +68,7 @@
 
             <div class="form-group mb-3">
                 <label for="foto" class="form-label">Bukti Keluhan</label>
-                <input type="file" name="foto" id="foto" class="form-control @error('foto') is-invalid @enderror" required>
+                <input type="file" name="foto[]" id="foto" class="form-control @error('foto') is-invalid @enderror" multiple>
                 @error('foto')
                     <div class="invalid-feedback">
                         {{ $message }}

@@ -28,10 +28,20 @@
       <div class="container-fluid mt--6">
         <div class="row">
           <div class="col">
-            <div class="card">
+            <div class="card"> 
               <!-- Card header -->
               <div class="card-header border-0 d-flex justify-content-between">
                 <h3 class="mb-0">Data Mahasiswa</h3>
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                      Tambah Mahasiswa
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                      <li><a class="dropdown-item" href="{{ route('mahasiswa.create') }}"><i class="bi bi-person-add me-2"></i>Tambah Manual</a></li>
+                      <li><a class="dropdown-item" href="{{ route('mahasiswa.download.format') }}"><i class="bi bi-download me-2"></i>Unduh Format</a></li>
+                      <li><a class="dropdown-item" href="#" id="importOption"><i class="bi bi-file-earmark-arrow-up me-2"></i>Import</a></li>
+                    </ul>
+                  </div>
               </div>
               <!-- Light table -->
               <div class="table-responsive">
@@ -172,8 +182,137 @@
             }
         });
     });
+</script>
 
+<!-- Modal untuk Unggah File -->
+<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="importModalLabel">Import Data Mahasiswa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Form Unggah File -->
+        <form action="{{ route('mahasiswa.import') }}" method="post" enctype="multipart/form-data">
+          @csrf
+          <div class="mb-3">
+            <label for="file" class="form-label">Pilih File</label>
+            <input type="file" class="form-control" name="file" id="file" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Import</button>
+        </form>
+        <div class="progress mt-3" style="display: none;" id="progressBarContainer">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" 
+               role="progressbar" 
+               aria-valuenow="0" 
+               aria-valuemin="0" 
+               aria-valuemax="100" 
+               style="width: 0%;" 
+               id="progressBar">
+          </div>
+      </div>      
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- JavaScript untuk menangani klik "Import" -->
+<script>
+  document.getElementById('importOption').addEventListener('click', function() {
+    // Menampilkan modal saat tombol Import diklik
+    var myModal = new bootstrap.Modal(document.getElementById('importModal'));
+    myModal.show();
+  });
+</script>
+
+<script>
+  document.querySelector('#importModal form').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    // Tampilkan progress bar
+    let progressBarContainer = document.getElementById('progressBarContainer');
+    let progressBar = document.getElementById('progressBar');
+    progressBarContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+    progressBar.setAttribute('aria-valuenow', '0');
+
+    fetch('{{ route('mahasiswa.import') }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => {
+        // Simulasikan progress (karena fetch tidak mendukung progress secara langsung)
+        let progress = 0;
+        let interval = setInterval(() => {
+            progress += 20; // Tingkatkan progress 20% setiap kali
+            progressBar.style.width = `${progress}%`;
+            progressBar.setAttribute('aria-valuenow', `${progress}`);
+            if (progress >= 100) clearInterval(interval);
+        }, 500); // Interval 500ms
+
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            Swal.fire({
+                title: 'Berhasil!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                // Update tabel tanpa reload
+                let tbody = document.querySelector('#keluhanTable tbody');
+                tbody.innerHTML = ''; // Kosongkan tabel
+                data.data.forEach((item, index) => {
+                    let row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${item.npm}</td>
+                            <td>${item.name}</td>
+                            <td>${item.username}</td>
+                            <td>${item.telp}</td>
+                            <td style="width: 100px;">
+                                <a href="{{ url('admin/mahasiswa/') }}/${item.npm}" class="btn btn-sm btn-info">Detail</a>
+                                <a href="#" data-npm="${item.npm}" class="btn btn-sm btn-danger mahasiswaDelete">Hapus</a>
+                            </td>
+                        </tr>`;
+                    tbody.innerHTML += row;
+                });
+
+                // Tutup modal
+                var myModal = bootstrap.Modal.getInstance(document.getElementById('importModal'));
+                myModal.hide();
+            });
+        } else {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Terjadi kesalahan saat mengimpor data.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    })
+    .catch(error => {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Gagal mengunggah file.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+        console.error('Error:', error);
+    })
+    .finally(() => {
+        // Sembunyikan progress bar
+        progressBarContainer.style.display = 'none';
+    });
+});
 
 </script>
+
 @endpush

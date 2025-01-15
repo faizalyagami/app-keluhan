@@ -55,15 +55,25 @@
       <h1 class="logo me-auto"><a href="/">Keluhan Mahasiswa</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-
-      <nav id="navbar" class="navbar order-last order-lg-0 ">
+      <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto {{ (request()->is('/keluhan')) ? 'active' : '' }}" href="{{ route('keluhan')}}">Buat Keluhan</a></li>
-          {{-- <li><a class="nav-link scrollto {{ (request()->is('tentang')) ? 'active' : '' }}" href="{{ url('tentang')}}">Tentang</a></li> --}}
-          <li><a class="nav-link scrollto {{ (request()->is('keluhan.laporan')) ? 'active' : '' }}" href="{{ route('keluhan.laporan', 'saya')}}">Keluhan Saya</a></li>
+            <li><a class="nav-link scrollto {{ (request()->is('/keluhan')) ? 'active' : '' }}" href="{{ route('keluhan')}}">Buat Keluhan</a></li>
+            <li><a class="nav-link scrollto {{ (request()->is('keluhan.laporan')) ? 'active' : '' }}" href="{{ route('keluhan.laporan', 'saya')}}">Keluhan Saya</a></li>
+            
+            <!-- Menu Setting Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle {{ (request()->is('keluhan.setting')) ? 'active' : '' }}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Setting
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item {{ (request()->is('keluhan.setting.password')) ? 'active' : '' }}" href="{{ route('keluhan.setting.password') }}">Ubah Password</a></li>
+                </ul>
+            </li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
+      </nav>
+    
+      <!-- .navbar -->
 
       @auth('mahasiswa')
         <a href="{{ route('user.logout')}}" class="appointment-btn scrollto">Logout</a>

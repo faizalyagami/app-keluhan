@@ -37,10 +37,20 @@
             <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <div class="media align-items-center">
                 <span class="avatar avatar-sm rounded-circle">
-                  <img alt="image" src="https://ui-avatars.com/api/?background=fff&color=0D8ABC&bold=true&name={{ auth('admin')->user()->name }}" class="rounded-circle mr-1">
+                  @if (auth('admin')->check())
+                    <img alt="image" src="https://ui-avatars.com/api/?background=fff&color=0D8ABC&bold=true&name={{ auth('admin')->user()->name }}" class="rounded-circle mr-1">
+                  @else
+                    <img alt="image" src="https://ui-avatars.com/api/?background=fff&color=0D8ABC&bold=true&name=Guest" class="rounded-circle mr-1">
+                  @endif
                 </span>
                 <div class="media-body  ml-2  d-none d-lg-block">
-                  <span class="mb-0 text-sm  font-weight-bold">{{ auth('admin')->user()->name }}</span>
+                  <span class="mb-0 text-sm  font-weight-bold">
+                    @if (auth('admin')->check())
+                      {{ auth('admin')->user()->name }}
+                    @else
+                      Guest    
+                    @endif
+                  </span>
                 </div>
                 </div>
                 </a>

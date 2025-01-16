@@ -11,3 +11,6 @@
   <script src="{{ asset('assets/backend/vendor/chart.js/dist/Chart.extension.js')}} "></script>
   <!-- Argon JS -->
   <script src="{{ asset('assets/backend/js/argon.js?v=1.2.0')}} "></script>
+
+  <!-- Tambahkan Lightbox JS sebelum penutupan </body> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>

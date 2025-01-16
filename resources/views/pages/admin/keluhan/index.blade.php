@@ -41,7 +41,7 @@
                                     <th scope="col" class="sort" data-sort="isi">Isi Keluhan</th>
                                     <th scope="col" class="sort" data-sort="status">Status</th>
                                     <th scope="col" class="sort" data-sort="action">Aksi</th>
-                                    @if ($keluhan->contains('status', 'selesai'))
+                                    @if ($keluhan->contains('status', 'selesai') && Auth::user()->roles === 'admin')
                                         <th scope="col" class="sort" data-sort="action">Evaluasi</th>
                                     @endif
                                 </tr>
@@ -84,15 +84,13 @@
                                             <td><a href="{{ route('keluhan.show', $v->id_keluhan) }}" class="btn btn-info">Lihat</a></td>
                                         @endif
                                         <td>
-                                          @if ($v->status == 'selesai')
+                                          @if ($v->status == 'selesai' && Auth::user()->roles === 'admin')
                                               <a href="#" data-id_keluhan="{{ $v->id_keluhan }}" data-bs-toggle="modal" data-bs-target="#evaluasiModal{{ $v->id_keluhan }}" class="btn btn-warning">Lihat</a>
                                               @if($v->first_evaluasi)
                                                   <span class="text-sm badge badge-success">Sudah di evaluasi</span>
                                               @else
                                                   <span class="text-sm badge badge-danger">Belum di evaluasi</span>
                                               @endif
-                                          @else
-                                              <span>-</span>
                                           @endif
                                       </td> 
                                     </tr>

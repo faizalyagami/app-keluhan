@@ -16,7 +16,7 @@ class CreateKeluhansTable extends Migration
         Schema::create('keluhan', function (Blueprint $table) {
             $table->id('id_keluhan');
             $table->dateTime('tgl_keluhan');
-            $table->char('npm', 16);
+            $table->char('npm', 11);
             $table->string('kategori_keluhan');
             $table->text('isi_keluhan');
             $table->string('foto')->nullable();
@@ -24,6 +24,7 @@ class CreateKeluhansTable extends Migration
 
             $table->timestamps();
 
+            // Foreign key relation with mahasiswa
             $table->foreign('npm')->references('npm')->on('mahasiswa')->onDelete('cascade')->onUpdate('cascade');
         });
     }

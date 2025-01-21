@@ -7,6 +7,7 @@ use App\Models\Petugas;
 use App\Models\Province;
 use App\Models\Mahasiswa;
 use App\Models\Struktural;
+use App\Models\KeluhanFoto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\KategoriKeluhan;
@@ -210,6 +211,7 @@ class UserController extends Controller
 
     public function storeKeluhan(Request $request)
     {
+        // dd($request->all());
         if (!Auth::guard('mahasiswa')->check()) {
             return redirect()->back()->with(['keluhan' => 'Login dibutuhkan!', 'type' => 'error']);
         } elseif (Auth::guard('mahasiswa')->user()->email_verified_at == null && Auth::guard('mahasiswa')->user()->telp_verified_at == null) {
@@ -222,6 +224,8 @@ class UserController extends Controller
             'kategori_keluhan' => ['required', 'exists:kategori_keluhan,id_kategori_keluhan'],
             'isi_keluhan' => ['required'],
             'id_struktural' => ['required', 'exists:struktural,id_struktural'],
+            'foto' => ['nullable', 'array'],  // Validasi foto sebagai array
+            'foto.*' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],  // Validasi setiap file foto
             //'tgl_keluhan' => ['required'],
             // 'id_kategori' => ['required'],
         ]);
@@ -231,11 +235,9 @@ class UserController extends Controller
         }
 
 
-        if ($request->file('foto')) {
-            $data['foto'] = $request->file('foto')->store('assets/keluhan', 'public');
-        }
-
         date_default_timezone_set('Asia/Bangkok');
+
+        // $foto = $request->hasFile('foto') ? $request->file('foto') : null;
 
         $keluhan = Keluhan::create([
             'tgl_keluhan' => date('Y-m-d h:i:s'),
@@ -245,13 +247,28 @@ class UserController extends Controller
             'id_struktural' => $data['id_struktural'],
             //'tgl_keluhan' => $data['tgl_keluhan'],
             // 'id_kategori' => $data['id_kategori'],
-            'foto' => $data['foto'],
+            'foto' => null,
             'status' => '0',
         ]);
 
+        if ($request->hasFile('foto')) {
+            $photos = $request->file('foto');
+            foreach ($photos as $photo) {
+                // Periksa apakah foto ada dan bukan null
+                if ($photo) {
+                    $path = $photo->store('assets/keluhan', 'public');
+                    KeluhanFoto::create([
+                        'id_keluhan' => $keluhan->id_keluhan,
+                        'path' => $path,
+                    ]);
+                }
+            }
+        }
+
         $struktural = Struktural::find($data['id_struktural']);
         if ($struktural) {
-            $petugas = Petugas::where('id_struktural', $struktural->id_struktural)->get();
+            //$petugas = Petugas::where('id_struktural', $struktural->id_struktural)->get();
+            $petugas = $struktural->petugas;
             $phoneNumb = [];
 
             foreach ($petugas as $petugasItem) {
@@ -283,7 +300,7 @@ class UserController extends Controller
     public function sendWhatsAppNotification($phoneNumb)
     {
         $curl = curl_init();
-        $token = 'p0hcS27acm9OpjUzoiYYxA3YLrTnqwisnMTZK8NZRy0SchNOr6eybYGExNSKXWTU';
+        $token = 'WM10KwMMTjmyWL1mAzw0sifJbmpUt8mpNN6uw8QwCM9LzxhozxGKCLcYldxbhSUb.dEVXlDX6';
         $url = 'https://bdg.wablas.com/api/v2/send-message';
         $random = true;
 
@@ -394,7 +411,7 @@ class UserController extends Controller
 
     public function password()
     {
-        return view('user.password');
+        return view('pages.user.password');
     }
 
     public function updatePassword(Request $request)

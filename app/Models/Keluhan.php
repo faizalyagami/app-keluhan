@@ -52,4 +52,9 @@ class Keluhan extends Model
     {
         return $this->hasMany(Evaluasi::class, 'id_keluhan', 'id_keluhan');
     }
+
+    public function photos()
+    {
+        return $this->hasMany(KeluhanFoto::class, 'id_keluhan');
+    }
 }

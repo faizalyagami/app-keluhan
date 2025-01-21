@@ -14,7 +14,7 @@ class CreateMahasiswasTable extends Migration
     public function up()
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
-            $table->char('npm', 16)->primary();
+            $table->char('npm', 11)->primary();
             $table->string('name', 50);
             $table->string('email')->unique();
             $table->dateTime('email_verified_at');
@@ -23,13 +23,13 @@ class CreateMahasiswasTable extends Migration
             $table->string('password');
             $table->string('telp', 13);
             $table->string('alamat', 13);
-            $table->char('rt', 4);
-            $table->char('rw', 4);
-            $table->char('kode_pos', 5);
-            $table->char('province_id', 2);
-            $table->char('regency_id', 4);
-            $table->char('district_id', 7);
-            $table->char('village_id', 10);
+            $table->char('rt', 4)->nullable();
+            $table->char('rw', 4)->nullable();
+            $table->char('kode_pos', 5)->nullable();
+            $table->char('province_id', 2)->nullable();
+            $table->char('regency_id', 4)->nullable();
+            $table->char('district_id', 7)->nullable();
+            $table->char('village_id', 10)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

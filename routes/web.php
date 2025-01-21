@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\KeluhanController;
+use App\Http\Controllers\Admin\MahasiswaController;
 use App\Http\Controllers\Admin\TanggapanController;
 use App\Http\Controllers\SendWhatsAppController;
 use App\Http\Controllers\TanggapanEmailController;
@@ -49,6 +50,12 @@ Route::middleware(['isMahasiswa'])->group(function () {
     Route::get('/keluhan-detail/{id_keluhan}', [\App\Http\Controllers\User\UserController::class, 'detailkeluhan'])->name('keluhan.detail');
 });
 
+// Route untuk pengaturan dan ubah password mahasiswa
+Route::middleware(['isMahasiswa'])->group(function () {
+    Route::get('/keluhan/setting/password', [\App\Http\Controllers\User\UserController::class, 'password'])->name('keluhan.setting.password');
+    Route::put('/keluhan/setting/password', [\App\Http\Controllers\User\UserController::class, 'updatePassword'])->name('keluhan.setting.password.update');
+});
+
 Route::prefix('admin')->group(function () {
     Route::middleware(['auth:admin', 'isAdmin'])->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
@@ -92,6 +99,11 @@ Route::post('/disposisi', [KeluhanController::class, 'storeDisposisi'])->name('d
 
 Route::post('/send-message', [SendWhatsAppController::class, 'sendMessage']);
 
+Route::get('/mahasiswa/download-format', [MahasiswaController::class, 'downloadFormat'])->name('mahasiswa.download.format');
+
+Route::post('/mahasiswa/import', [MahasiswaController::class, 'import'])->name('mahasiswa.import');
+
+Route::get('mahasiswa/create', [MahasiswaController::class, 'create'])->name('mahasiswa.create');
 // Route::middleware(['auth:petugas'])->group(function () {
 //     Route::get('/keluhan/{status}', [KeluhanController::class, 'index'])->name('keluhan.index');
 //     Route::get('/keluhan/detail/{id_keluhan}', [KeluhanController::class, 'show'])->name('keluhan.show');

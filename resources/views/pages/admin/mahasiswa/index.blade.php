@@ -78,7 +78,7 @@
                 </table>
               </div>
               <!-- Card footer -->
-              <div class="card-footer py-4">
+              {{-- <div class="card-footer py-4">
                 <nav aria-label="...">
                   <ul class="pagination justify-content-end mb-0">
                     <li class="page-item disabled">
@@ -102,7 +102,7 @@
                     </li>
                   </ul>
                 </nav>
-              </div>
+              </div> --}}
             </div>
           </div>
         </div>
@@ -182,6 +182,15 @@
             }
         });
     });
+
+    $(document).ready(function() {
+    $('#keluhanTable').DataTable({
+        "paging": true,  // Aktifkan pagination
+        "searching": true, // Aktifkan pencarian
+        "ordering": true,  // Aktifkan pengurutan
+        "info": true  // Tampilkan informasi tabel
+    });
+  });
 </script>
 
 <!-- Modal untuk Unggah File -->

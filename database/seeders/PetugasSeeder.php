@@ -103,7 +103,7 @@ class PetugasSeeder extends Seeder
             [
                 'nama_petugas'  => 'Noer Fitriani, S.Psi',
                 'username'  => 'A180405',
-                'telp' => '6282187785000',
+                'telp' => '628987955393',
                 'password'  => bcrypt('A180405'),
                 'roles' => 'petugas',
             ]

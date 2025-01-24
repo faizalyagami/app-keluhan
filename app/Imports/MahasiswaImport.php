@@ -14,6 +14,12 @@ class MahasiswaImport implements ToModel, WithHeadingRow
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
+
+    // public function __construct()
+    // {
+    //     set_time_limit(300);
+    // }
+
     public function model(array $row)
     {
         return new Mahasiswa([

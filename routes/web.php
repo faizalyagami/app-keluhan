@@ -63,6 +63,8 @@ Route::prefix('admin')->group(function () {
         Route::resource('/petugas', \App\Http\Controllers\Admin\PetugasController::class);
         Route::resource('/mahasiswa', \App\Http\Controllers\Admin\MahasiswaController::class);
 
+        Route::delete('/mahasiswa/{npm}', [MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
+
         Route::get('/laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])->name('laporan.index');
         Route::post('/laporan-get', [\App\Http\Controllers\Admin\LaporanController::class, 'laporan'])->name('laporan.get');
         Route::post('/laporan/export', [\App\Http\Controllers\Admin\LaporanController::class, 'export'])->name('laporan.export');

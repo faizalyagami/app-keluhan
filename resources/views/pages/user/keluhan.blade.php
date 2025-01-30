@@ -8,7 +8,7 @@
     <section class="inner-page">
       <div class="container ">
         <div class="title text-center mb-5">
-            <h2 class="text-center">Assalamualaikum {{ $mahasiswa->name }}, buatkan keluhanmu!</h2>
+            {{-- <h2 class="text-center">Assalamualaikum {{ $mahasiswa->name }}, buatkan keluhanmu!</h2> --}}
             <h3 class="fw-bold">Layanan Keluhan</h3>
             <h5 class="fw-normal">Sampaikan keluhan Anda langsung kepada yang berwenang</h5>
         </div>

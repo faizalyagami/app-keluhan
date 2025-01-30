@@ -79,22 +79,26 @@ class MahasiswaController extends Controller
         return redirect()->route('mahasiswa.index')->with('success', 'Mahasiswa berhasil ditambahkan.');
     }
 
-    public function destroy(Request $request, $npm)
+    public function destroy($npm)
     {
 
-        if ($npm = 'npm') {
-            $npm = $request->npm;
+        // Cari mahasiswa berdasarkan npm
+        $mahasiswa = Mahasiswa::where('npm', $npm)->first();
+
+        // Jika mahasiswa tidak ditemukan
+        if (!$mahasiswa) {
+            return redirect()->route('mahasiswa.index')->with('error', 'Mahasiswa tidak ditemukan.');
         }
 
-        $mahasiswa = Mahasiswa::find($npm);
-
+        // Hapus mahasiswa
         $mahasiswa->delete();
 
-        if ($request->ajax()) {
-            return 'success';
+        // Respon untuk AJAX atau biasa
+        if (request()->ajax()) {
+            return response()->json(['status' => 'success', 'message' => 'Mahasiswa berhasil dihapus']);
         }
 
-        return redirect()->route('mahasiswa.index');
+        return redirect()->route('mahasiswa.index')->with('success', 'Mahasiswa berhasil dihapus.');
     }
 
     public function downloadFormat()

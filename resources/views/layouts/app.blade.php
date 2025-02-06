@@ -62,12 +62,13 @@
             
             <!-- Menu Setting Dropdown -->
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle {{ (request()->is('keluhan.setting')) ? 'active' : '' }}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Setting
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item {{ (request()->is('keluhan.setting.password')) ? 'active' : '' }}" href="{{ route('keluhan.setting.password') }}">Ubah Password</a></li>
-                </ul>
+              <a class="nav-link dropdown-toggle {{ request()->is('keluhan/setting/*') ? 'active' : '' }}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Setting
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item {{ request()->is('keluhan/setting/profile') ? 'active' : '' }}" href="{{ route('keluhan.setting.profile') }}">Ubah Profile</a></li>
+                  <li><a class="dropdown-item {{ request()->is('keluhan/setting/password') ? 'active' : '' }}" href="{{ route('keluhan.setting.password') }}">Ubah Password</a></li>
+              </ul>
             </li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>

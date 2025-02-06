@@ -20,7 +20,9 @@
         "laravel/tinker": "^2.5",
         "maatwebsite/excel": "^3.1",
         "realrashid/sweet-alert": "^4.0",
-        "silvanix/wablas": "^1.0"
+        "silvanix/wablas": "^1.0",
+        "symfony/http-client": "^5.4",
+        "symfony/mailer": "5.4"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

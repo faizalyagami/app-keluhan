@@ -36,6 +36,10 @@ return [
     */
 
     'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'petugas', // Sesuaikan dengan provider yang benar
+        ],
         'petugas' => [
             'driver' => 'session',
             'provider' => 'petugas',

@@ -483,58 +483,44 @@ class UserController extends Controller
 
     public function profil()
     {
-        $npm = Auth::guard('mahasiswa')->user()->npm;
+        $user = Auth::guard('mahasiswa')->user();
 
-        $mahasiswa = Mahasiswa::where('npm', $npm)->first();
+        // Jika belum login, redirect ke halaman login dengan pesan error
+        if (!$user) {
+            return redirect()->route('login')->withErrors(['message' => 'Silakan login terlebih dahulu']);
+        }
 
-        return view('user.profil', ['mahasiswa' => $mahasiswa]);
+        // Ambil data mahasiswa berdasarkan npm
+        $mahasiswa = Mahasiswa::where('npm', $user->npm)->first();
+
+        return view('pages.user.profile', compact('mahasiswa'));
     }
 
     public function updateProfil(Request $request)
     {
-        $npm = Auth::guard('mahasiswa')->user()->npm;
+        $user = Auth::guard('mahasiswa')->user();
+        if (!$user) {
+            return redirect()->back()->with(['pesan' => 'User tidak ditemukan!', 'type' => 'danger']);
+        }
 
-        $data = $request->all();
-
-        $validate = Validator::make($data, [
-            'npm' => ['sometimes', 'required', 'min:11', 'max:11', Rule::unique('mahasiswa')->ignore($npm, 'npm')],
-            'nama' => ['required', 'string'],
-            'email' => ['sometimes', 'required', 'email', 'string', Rule::unique('mahasiswa')->ignore($npm, 'npm')],
-            'username' => ['sometimes', 'required', 'string', 'regex:/^\S*$/u', Rule::unique('mahasiswa')->ignore($npm, 'npm'), 'unique:petugas,username'],
-            'jenis_kelamin' => ['required'],
-            'telp' => ['required', 'regex:/(08)[0-9]/'],
-            'alamat' => ['required'],
-            'rt' => ['required'],
-            'rw' => ['required'],
-            'kode_pos' => ['required'],
-            'province_id' => ['required'],
-            'regency_id' => ['required'],
-            'district_id' => ['required'],
-            'village_id' => ['required'],
+        $validate = Validator::make($request->all(), [
+            'email' => ['required', 'email', 'string', Rule::unique('mahasiswa')->ignore($user->npm, 'npm')],
+            'telp' => ['required', 'regex:/^628[1-9][0-9]{7,11}$/'],
+            'alamat' => ['required', 'string'],
+            'jenis_kelamin' => ['required', 'in:Laki-laki,Perempuan'],
         ]);
 
         if ($validate->fails()) {
-            return redirect()->back()->withErrors($validate);
+            return redirect()->back()->withErrors($validate)->withInput();
+        }
+        $mahasiswa = Mahasiswa::where('npm', $user->npm)->first();
+
+        if (!$mahasiswa) {
+            return redirect()->back()->with(['pesan' => 'Data mahasiswa tidak ditemukan!', 'type' => 'danger']);
         }
 
-        $mahasiswa = Mahasiswa::where('npm', $npm);
+        $mahasiswa->update($request->only(['email', 'telp', 'alamat', 'jenis_kelamin']));
 
-        $mahasiswa->update([
-            'npm' => $data['npm'],
-            'nama' => $data['nama'],
-            'email' => $data['email'],
-            'username' => strtolower($data['username']),
-            'jenis_kelamin' => $data['jenis_kelamin'],
-            'telp' => $data['telp'],
-            'alamat' => $data['alamat'],
-            'rt' => $data['rt'],
-            'rw' => $data['rw'],
-            'kode_pos' => $data['kode_pos'],
-            'province_id' => $data['province_id'],
-            'regency_id' => $data['regency_id'],
-            'district_id' => $data['district_id'],
-            'village_id' => $data['village_id'],
-        ]);
         return redirect()->back()->with(['pesan' => 'Profil berhasil diubah!', 'type' => 'success']);
     }
 }

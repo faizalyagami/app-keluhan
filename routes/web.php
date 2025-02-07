@@ -54,7 +54,7 @@ Route::middleware(['isMahasiswa'])->group(function () {
 Route::middleware(['isMahasiswa'])->group(function () {
     Route::get('/keluhan/setting/password', [\App\Http\Controllers\User\UserController::class, 'password'])->name('keluhan.setting.password');
     Route::put('/keluhan/setting/password', [\App\Http\Controllers\User\UserController::class, 'updatePassword'])->name('keluhan.setting.password.update');
-    Route::get('/keluhan/setting/profile', [\App\Http\Controllers\User\UserController::class, 'updateProfil'])->name('keluhan.setting.profile');
+    Route::get('/keluhan/setting/profile', [\App\Http\Controllers\User\UserController::class, 'profil'])->name('keluhan.setting.profile');
     Route::put('/keluhan/setting/profile', [\App\Http\Controllers\User\UserController::class, 'updateProfil'])->name('keluhan.setting.profile.update');
 });
 

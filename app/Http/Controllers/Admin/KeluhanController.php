@@ -22,7 +22,7 @@ class KeluhanController extends Controller
         // dd($loggedPetugas);
 
         $keluhan = Keluhan::with(['kategori', 'evaluasi'])
-            ->where('statusd', $status)
+            ->where('status', $status)
             // ->when($loggedPetugas->roles == 'petugas', function ($q) use ($loggedPetugas) {
             //     if (in_array($loggedPetugas->nama_petugas, [
             //         'Dr. Dewi Sartika, M.Si'

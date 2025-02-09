@@ -57,4 +57,9 @@ class Keluhan extends Model
     {
         return $this->hasMany(KeluhanFoto::class, 'id_keluhan');
     }
+
+    public function firstEvaluasi()
+    {
+        return $this->hasOne(Evaluasi::class, 'id_keluhan')->latest();
+    }
 }

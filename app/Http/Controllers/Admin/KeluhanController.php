@@ -21,12 +21,10 @@ class KeluhanController extends Controller
         $loggedPetugas = Auth::guard('admin')->user();
         // dd($loggedPetugas);
 
-        $keluhan = Keluhan::with(['kategori', 'evaluasi'])
+        $keluhan = Keluhan::with(['kategori', 'evaluasi', 'struktural', 'firstEvaluasi'])
             ->where('status', $status)
             ->when($loggedPetugas->roles == 'petugas', function ($q) use ($loggedPetugas) {
-                if (in_array($loggedPetugas->nama_petugas, [
-                    'Dr. Dewi Sartika, M.Si'
-                ])) {
+                if (in_array($loggedPetugas->nama_petugas, ['Dr. Dewi Sartika, M.Si'])) {
                     $q->wherehas('struktural', function ($query) {
                         $query->where('nama_struktural', 'Dekan Fakultas');
                     });
@@ -74,7 +72,7 @@ class KeluhanController extends Controller
                 }
             })
             ->orderBy('tgl_keluhan', 'desc')
-            ->get();
+            ->paginate(10);
 
         foreach ($keluhan as $k) {
             $k->first_evaluasi = $k->evaluasi->isEmpty() ? null : $k->evaluasi->first();

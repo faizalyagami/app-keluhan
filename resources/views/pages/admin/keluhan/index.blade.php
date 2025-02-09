@@ -105,11 +105,7 @@
                                                         <h5 class="modal-title" id="evaluasiModal">Evaluasi Keluhan {{ $v->id_keluhan }}</h5>
                                                     </div>
                                                     <div class="modal-body">
-                                                        @if ($v->first_evaluasi)
-                                                            <p>{{ $v->first_evaluasi->isi_evaluasi }}</p>
-                                                        @else
-                                                            <p>Tidak ada evaluasi tersedia</p>
-                                                        @endif
+                                                        <p>{{ $v->firstEvaluasi->isi_evaluasi ?? 'Belum ada evaluasi' }}</p>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -59,8 +59,8 @@
                                         <td>
                                             <span class="text-sm">{{ $v->struktural->nama_struktural ?? 'Tidak ditemukan' }}</span>
                                         </td>
-                                        <td>
-                                            <span class="text-sm">{{ Str::limit($v->isi_keluhan, 30) }}</span>
+                                        <td title="{{ $v->isi_keluhan }}">
+                                            <span class="text-sm">{{ substr($v->isi_keluhan, 0, 30) }}</span>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">

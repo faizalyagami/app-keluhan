@@ -24,50 +24,24 @@ class KeluhanController extends Controller
         $keluhan = Keluhan::with(['kategori', 'evaluasi', 'struktural', 'firstEvaluasi'])
             ->where('status', $status)
             ->when($loggedPetugas->roles == 'petugas', function ($q) use ($loggedPetugas) {
-                if (in_array($loggedPetugas->nama_petugas, ['Dr. Dewi Sartika, M.Si'])) {
-                    $q->wherehas('struktural', function ($query) {
-                        $query->where('nama_struktural', 'Dekan Fakultas');
-                    });
-                } elseif (in_array($loggedPetugas->nama_petugas, [
-                    'Dr. Siti Qodariah, M.Psi.',
-                    'Farida Coralia, S.Psi., M.Psi.',
-                ])) {
-                    $q->wherehas('struktural', function ($query) {
-                        $query->where('nama_struktural', 'Bidang Akademik S1');
-                    });
-                } elseif (in_array($loggedPetugas->nama_petugas, [
-                    'Dr. Eneng Nurlaili Wangi, M.Psi.',
-                    'Dr. Endah Nawangsih, Dra., M.Psi.',
-                ])) {
-                    $q->wherehas('struktural', function ($query) {
-                        $query->where('nama_struktural', 'Bidang Akademik Profesi');
-                    });
-                } elseif (in_array($loggedPetugas->nama_petugas, [
-                    'Dr. Lilim Halimah, BHSc., MHSPY.',
-                    'Nurmariam'
-                ])) {
-                    $q->wherehas('struktural', function ($query) {
-                        $query->where('nama_struktural', 'Bidang Administrasi Umum dan Keuangan');
-                    });
-                } elseif (in_array($loggedPetugas->nama_petugas, [
-                    'Suhana, S.Psi., M.Psi.',
-                    'Undang Kamaludin'
-                ])) {
-                    $q->wherehas('struktural', function ($query) {
-                        $query->where('nama_struktural', 'Bidang Kemahasiswaan');
-                    });
-                } elseif (in_array($loggedPetugas->nama_petugas, [
-                    'Rizka Hadian Permana, S.Psi., M.Psi.'
-                ])) {
-                    $q->whereHas('struktural', function ($query) {
-                        $query->where('nama_struktural', 'Laboratorium Psikologi');
-                    });
-                } elseif (in_array($loggedPetugas->nama_petugas, [
-                    'Ali Mubarak, S.Psi., M.Psi.',
-                    'Nida Hamidah, S.Psi'
-                ])) {
-                    $q->whereHas('struktural', function ($query) {
-                        $query->whereIn('nama_struktural', ['Bidang Akademik S1', 'Bidang Akademik Profesi']);
+                $strukturalMapping = [
+                    'Dr. Dewi Sartika, M.Si' => ['Dekan Fakultas'],
+                    'Dr. Siti Qodariah, M.Psi.' => ['Bidang Akademik S1'],
+                    'Farida Coralia, S.Psi., M.Psi.' => ['Bidang Akademik S1'],
+                    'Dr. Eneng Nurlaili Wangi, M.Psi.' => ['Bidang Akademik Profesi'],
+                    'Dr. Endah Nawangsih, Dra., M.Psi.' => ['Bidang Akademik Profesi'],
+                    'Dr. Lilim Halimah, BHSc., MHSPY.' => ['Bidang Administrasi Umum dan Keuangan'],
+                    'Nurmariam' => ['Bidang Administrasi Umum dan Keuangan'],
+                    'Suhana, S.Psi., M.Psi.' => ['Bidang Kemahasiswaan'],
+                    'Undang Kamaludin' => ['Bidang Kemahasiswaan'],
+                    'Rizka Hadian Permana, S.Psi., M.Psi.' => ['Laboratorium Psikologi'],
+                    'Ali Mubarak, S.Psi., M.Psi.' => ['Bidang Akademik S1', 'Bidang Akademik Profesi'],
+                    'Nida Hamidah, S.Psi' => ['Bidang Akademik S1', 'Bidang Akademik Profesi'],
+                ];
+
+                if (isset($strukturalMapping[$loggedPetugas->nama_petugas])) {
+                    $q->whereHas('struktural', function ($query) use ($strukturalMapping, $loggedPetugas) {
+                        $query->whereIn('nama_struktural', $strukturalMapping[$loggedPetugas->nama_petugas]);
                     });
                 }
             })

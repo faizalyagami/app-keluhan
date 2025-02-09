@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Evaluasi;
+use App\Models\Disposisi;
 use App\Models\Mahasiswa;
 use App\Models\Struktural;
+use App\Models\KeluhanFoto;
+use App\Models\KategoriKeluhan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

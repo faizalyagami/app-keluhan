@@ -43,11 +43,11 @@ class MahasiswaController extends Controller
             'email' => 'required|email|unique:mahasiswa,email',
             'username' => 'required|unique:mahasiswa,username|max:50',
             'jenis_kelamin' => 'required',
-            'telp' => ['required', 'regex:/^628\d{6,10}$/'],
+            'telp' => ['required', 'regex:/^628\d{6,11}$/'],
             'alamat' => 'required|string'
         ], [
             'email.email' => 'Format email yang dimasukkan tidak valid.',
-            'telp.regex' => 'Nomor telepon harus diawali dengan 628 diikuti dengan 6 hingga 10 digit angka.'
+            'telp.regex' => 'Nomor telepon harus diawali dengan 628 diikuti dengan 6 hingga 11 digit angka.'
         ]);
 
         $password = Hash::make($request->npm);

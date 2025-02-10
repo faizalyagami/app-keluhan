@@ -485,12 +485,10 @@ class UserController extends Controller
     {
         $user = Auth::guard('mahasiswa')->user();
 
-        // Jika belum login, redirect ke halaman login dengan pesan error
         if (!$user) {
             return redirect()->route('login')->withErrors(['message' => 'Silakan login terlebih dahulu']);
         }
 
-        // Ambil data mahasiswa berdasarkan npm
         $mahasiswa = Mahasiswa::where('npm', $user->npm)->first();
 
         return view('pages.user.profile', compact('mahasiswa'));
@@ -505,7 +503,7 @@ class UserController extends Controller
 
         $validate = Validator::make($request->all(), [
             'email' => ['required', 'email', 'string', Rule::unique('mahasiswa')->ignore($user->npm, 'npm')],
-            'telp' => ['required', 'regex:/^628[1-9][0-9]{7,11}$/'],
+            'telp' => ['required', 'regex:/^628\d{6,11}$/'],
             'alamat' => ['required', 'string'],
             'jenis_kelamin' => ['required', 'in:Laki-laki,Perempuan'],
         ]);
@@ -521,6 +519,9 @@ class UserController extends Controller
 
         $mahasiswa->update($request->only(['email', 'telp', 'alamat', 'jenis_kelamin']));
 
-        return redirect()->back()->with(['pesan' => 'Profil berhasil diubah!', 'type' => 'success']);
+        // return redirect()->back()->with(['pesan' => 'Profil berhasil diubah!', 'type' => 'success']);
+        if ($request->ajax()) {
+            return response()->json(['message' => 'Profil berhasil diperbarui!']);
+        }
     }
 }

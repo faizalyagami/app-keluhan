@@ -59,7 +59,7 @@
                                         <td>
                                             <span class="text-sm">{{ $v->struktural->nama_struktural ?? 'Tidak ditemukan' }}</span>
                                         </td>
-                                        <td title="{{ $v->isi_keluhan }}">
+                                        <td class="text-break" title="{{ $v->isi_keluhan }}">
                                             <span class="text-sm">{{ substr($v->isi_keluhan, 0, 30) }}</span>
                                         </td>
                                         <td>

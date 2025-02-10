@@ -64,7 +64,7 @@
                         <tr>
                             <th>Isi Keluhan</th>
                             <td>:</td>
-                            <td>{{ $keluhan->isi_keluhan }}</td>
+                            <td style="word-wrap: break-word; max-width: 200px; white-space: normal;">{{ $keluhan->isi_keluhan }}</td>
                         </tr>
                         <tr>
                             <th>Status</th>

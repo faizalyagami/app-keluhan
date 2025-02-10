@@ -503,7 +503,7 @@ class UserController extends Controller
 
         $validate = Validator::make($request->all(), [
             'email' => ['required', 'email', 'string', Rule::unique('mahasiswa')->ignore($user->npm, 'npm')],
-            'telp' => ['required', 'regex:/^628\d{6,11}$/'],
+            'telp' => ['required', 'regex:/^628\d{6,15}$/'],
             'alamat' => ['required', 'string'],
             'jenis_kelamin' => ['required', 'in:Laki-laki,Perempuan'],
         ]);
